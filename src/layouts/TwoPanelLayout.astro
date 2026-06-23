@@ -1,0 +1,194 @@
+---
+import { SITE } from "@consts";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title: string;
+  description: string;
+  articlePage?: boolean;
+}
+
+const { title, description, articlePage = false } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔬</text></svg>"
+    />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{title} | {SITE.TITLE}</title>
+    <meta name="title" content={`${title} | ${SITE.TITLE}`} />
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={`${title} | ${SITE.TITLE}`} />
+    <meta property="og:description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Lora:ital,wght@0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <ClientRouter />
+    <script is:inline>
+      function addCopyCodeButtons() {
+        let copyButtonLabel = "📋";
+        let codeBlocks = Array.from(document.querySelectorAll("pre"));
+        async function copyCode(codeBlock, copyButton) {
+          const codeText = codeBlock.innerText;
+          const buttonText = copyButton.innerText;
+          const textToCopy = codeText.replace(buttonText, "");
+          await navigator.clipboard.writeText(textToCopy);
+          copyButton.innerText = "✅";
+          setTimeout(() => { copyButton.innerText = copyButtonLabel; }, 2000);
+        }
+        for (let codeBlock of codeBlocks) {
+          const wrapper = document.createElement("div");
+          wrapper.style.position = "relative";
+          const copyButton = document.createElement("button");
+          copyButton.innerText = copyButtonLabel;
+          copyButton.className = "copy-code-btn";
+          codeBlock.setAttribute("tabindex", "0");
+          codeBlock.appendChild(copyButton);
+          codeBlock.parentNode.insertBefore(wrapper, codeBlock);
+          wrapper.appendChild(codeBlock);
+          copyButton.addEventListener("click", async () => {
+            await copyCode(codeBlock, copyButton);
+          });
+        }
+      }
+      document.addEventListener("DOMContentLoaded", () => addCopyCodeButtons());
+      document.addEventListener("astro:after-swap", () => addCopyCodeButtons());
+    </script>
+  </head>
+  <body>
+    <div class="layout">
+      <div class={`panel-left${articlePage ? " scrollbar-accent" : ""}`}>
+        <slot name="left" />
+      </div>
+      <div class="panel-right">
+        <slot name="right" />
+      </div>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --panel-left: #e6e0d4;
+    --panel-right: #faf8f3;
+    --text-primary: #1c1917;
+    --text-muted: #8c8476;
+    --text-body: #3a3730;
+    --accent: #a07848;
+    --border: rgba(80, 60, 30, 0.12);
+    --card-bg: rgba(250, 247, 240, 0.58);
+    --card-bg-hover: rgba(250, 247, 240, 0.92);
+    --tag-bg: rgba(80, 60, 30, 0.07);
+    --sans: "DM Sans", system-ui, sans-serif;
+    --serif: "Lora", Georgia, serif;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--sans);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 9fr 4fr;
+    height: 100vh;
+  }
+
+  .panel-left {
+    background: var(--panel-left);
+    padding: 56px 64px 72px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .panel-right {
+    background: var(--panel-right);
+    padding: 56px 44px 72px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    border-left: 1px solid rgba(80, 60, 30, 0.1);
+  }
+
+  /* Article pages: always-visible accent scrollbar */
+  .panel-left.scrollbar-accent {
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+  }
+
+  .panel-left.scrollbar-accent::-webkit-scrollbar { width: 4px; }
+  .panel-left.scrollbar-accent::-webkit-scrollbar-track { background: transparent; }
+  .panel-left.scrollbar-accent::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 99px;
+  }
+
+  /* Code blocks */
+  pre {
+    background: rgba(28, 25, 23, 0.04) !important;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .copy-code-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: var(--panel-right);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+  }
+
+  .copy-code-btn:hover { background: #ede8df; }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    html, body { overflow: auto; }
+    .layout { grid-template-columns: 1fr; height: auto; }
+    .panel-left { height: auto; overflow-y: visible; padding: 40px 28px 48px; }
+    .panel-right { height: auto; overflow-y: visible; border-left: none; border-top: 1px solid rgba(80, 60, 30, 0.1); padding: 40px 28px 48px; }
+  }
+</style>

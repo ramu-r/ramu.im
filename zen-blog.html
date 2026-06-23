@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>your name</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --zen-paper: #f2f0e3;
+        --zen-dark: #2e2e2e;
+        --zen-primary: #405dff;
+        --zen-teal: #62fbd5;
+        --zen-coral: #f76f53;
+        --zen-muted: rgba(0, 0, 0, 0.05);
+
+        --c-bg: var(--zen-paper);
+        --c-fg: var(--zen-dark);
+        --c-link: var(--zen-coral);
+        --c-accent: var(--zen-primary);
+        --c-featured-bg: rgba(64, 93, 255, 0.07);
+        --c-featured-border: var(--zen-primary);
+        --c-label: #8a8777;
+        --c-meta: #9b9888;
+        --c-desc: #524f46;
+        --c-divider: #dddaca;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --c-bg: var(--zen-dark);
+          --c-fg: var(--zen-paper);
+          --c-link: var(--zen-teal);
+          --c-accent: var(--zen-teal);
+          --c-featured-bg: rgba(98, 251, 213, 0.07);
+          --c-featured-border: var(--zen-teal);
+          --c-label: #8a8880;
+          --c-meta: #7a7870;
+          --c-desc: #c4c2b5;
+          --c-divider: #3e3e3e;
+        }
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--c-bg);
+        color: var(--c-fg);
+        font-family: "Bricolage Grotesque", system-ui, sans-serif;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        font-weight: 400;
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a:link,
+      a:visited {
+        color: var(--c-link);
+        text-decoration-line: underline;
+        text-underline-offset: 3px;
+        text-decoration-thickness: 1px;
+      }
+
+      a:hover {
+        opacity: 0.75;
+      }
+
+      /* ── Page shell ── */
+      .container {
+        max-width: 720px;
+        margin: 2.5rem auto;
+        padding: 0 1.5rem 4rem;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 0 1rem 3rem;
+        }
+      }
+
+      /* ── Logo ── */
+      .logo {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--c-fg);
+        margin-bottom: 2.6rem;
+        opacity: 0.6;
+      }
+
+      /* ── Name / byline ── */
+      h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0 0 0.5rem;
+        line-height: 1.05;
+      }
+
+      .byline {
+        margin: 0 0 0.7rem;
+        font-size: 1.05rem;
+        color: var(--c-desc);
+      }
+
+      .byline a {
+        font-weight: 500;
+      }
+
+      .bio {
+        margin: 0 0 1.8rem;
+        font-size: 1rem;
+        color: var(--c-desc);
+        line-height: 1.6;
+        max-width: 520px;
+      }
+
+      /* ── Social icons ── */
+      .social {
+        display: flex;
+        gap: 14px;
+        margin-bottom: 3.6rem;
+      }
+
+      .social a {
+        color: var(--c-label);
+        text-decoration: none;
+      }
+
+      .social a:hover {
+        opacity: 0.6;
+      }
+
+      .social svg {
+        width: 19px;
+        height: 19px;
+        display: block;
+      }
+
+      /* ── Section labels (zen h2 style) ── */
+      h2 {
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--c-label);
+        margin: 0 0 1.2rem;
+        border-bottom: 1px solid var(--c-divider);
+        padding-bottom: 0.65rem;
+      }
+
+      /* ── Two-column content ── */
+      .cols {
+        display: flex;
+        gap: 4em;
+        margin-bottom: 3.6rem;
+      }
+
+      .cols .writing {
+        flex: 1 1 65%;
+      }
+      .cols .notes {
+        flex: 1 1 45%;
+      }
+
+      @media (max-width: 640px) {
+        .cols {
+          flex-direction: column;
+          gap: 2.6rem;
+        }
+      }
+
+      /* ── Writing entries ── */
+      h3 {
+        font-size: 1.08rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 1.5rem 0 0.25rem;
+        line-height: 1.35;
+      }
+
+      h3 a:link,
+      h3 a:visited {
+        color: var(--c-fg);
+        text-decoration: none;
+      }
+
+      h3 a:hover {
+        color: var(--c-link);
+        opacity: 1;
+      }
+
+      p.desc {
+        margin: 0;
+        font-size: 0.96rem;
+        color: var(--c-desc);
+        line-height: 1.55;
+      }
+
+      small {
+        font-weight: 400;
+        font-size: 0.78em;
+        color: var(--c-meta);
+      }
+
+      /* ── Featured entry ── */
+      .featured {
+        margin: 0 0 0.4rem -0.85rem;
+        padding: 0.8rem 0.85rem;
+        border-left: 2.5px solid var(--c-featured-border);
+        background: var(--c-featured-bg);
+        border-radius: 0 6px 6px 0;
+      }
+
+      .featured h3 {
+        margin-top: 0;
+      }
+      .featured p {
+        margin-bottom: 0;
+      }
+
+      /* ── Notes ── */
+      .note {
+        padding: 1rem 0;
+      }
+
+      .note + .note {
+        border-top: 1px solid var(--c-divider);
+      }
+
+      .note-text {
+        font-size: 0.96rem;
+        color: var(--c-fg);
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .note-text a:not(.note-link-card):link,
+      .note-text a:not(.note-link-card):visited {
+        color: var(--c-link);
+        text-decoration-line: underline;
+        text-underline-offset: 3px;
+        text-decoration-thickness: 1px;
+      }
+
+      .note-quote {
+        border-left: 2.5px solid var(--c-accent);
+        padding-left: 12px;
+        color: var(--c-desc);
+        font-style: italic;
+        margin: 0;
+      }
+
+      .note-meta {
+        font-size: 0.8rem;
+        color: var(--c-meta);
+        margin-top: 5px;
+      }
+
+      .note-link-card {
+        display: block;
+        text-decoration: none;
+        margin-top: 6px;
+      }
+
+      .note-link-card:hover {
+        opacity: 0.65;
+      }
+
+      .note-link-card .link-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--c-link);
+        text-decoration-line: underline;
+        text-underline-offset: 3px;
+        text-decoration-thickness: 1px;
+        display: inline;
+      }
+
+      .note-link-card .link-domain {
+        display: inline;
+        font-size: 0.85rem;
+        color: var(--c-meta);
+      }
+
+      .note-link-card .link-domain::before {
+        content: " — ";
+      }
+
+      /* ── Footer ── */
+      footer {
+        margin-top: 3.5rem;
+        padding-top: 1.1rem;
+        border-top: 1px solid var(--c-divider);
+        font-size: 0.84rem;
+        color: var(--c-meta);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>I'm Ramu</h1>
+      <p class="byline">
+        writer &amp; reader &mdash; <a href="#">@handle</a>
+        <small>(they/them)</small>
+      </p>
+      <p class="bio">
+        exploring technology, ideas, and the small details that shape how we
+        think.
+      </p>
+
+      <div class="social">
+        <a href="#" aria-label="Twitter">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+            />
+          </svg>
+        </a>
+        <a href="#" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"
+            />
+          </svg>
+        </a>
+        <a href="mailto:you@example.com" aria-label="Email">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <polyline points="22,4 12,13 2,4" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="cols">
+        <section class="writing">
+          <h2>writing</h2>
+
+          <h3>
+            <a href="#">On building things that last</a> <small>Mar 2026</small>
+          </h3>
+          <p class="desc">
+            Why durability is the most underrated quality in software.
+          </p>
+
+          <h3>
+            <a href="#">The case for writing more and publishing less</a>
+            <small>Feb 2026</small>
+          </h3>
+          <p class="desc">Most of what I write never sees the light of day.</p>
+
+          <h3><a href="#">Tools for thinking</a> <small>Jan 2026</small></h3>
+          <p class="desc">Software and practices that help me think clearly.</p>
+
+          <h3>
+            <a href="#">Reading as a creative practice</a>
+            <small>Dec 2025</small>
+          </h3>
+          <p class="desc">How deliberate reading changed my approach.</p>
+
+          <h3><a href="#">Small software</a> <small>Nov 2025</small></h3>
+          <p class="desc">In praise of software that does one thing well.</p>
+        </section>
+
+        <section class="notes">
+          <h2>notes</h2>
+
+          <div class="note">
+            <p class="note-text">
+              "The best writing is rewriting." &mdash; E.B. White
+            </p>
+            <div class="note-meta">Mar 12, 2026</div>
+          </div>
+
+          <div class="note">
+            <p class="note-text">
+              really enjoyed this piece on how constraints breed creativity in
+              software design.
+              <a href="#" class="note-link-card">
+                <span class="link-title"
+                  >Constraints and Creativity in Software</span
+                >
+                <span class="link-domain">example.com</span>
+              </a>
+            </p>
+            <div class="note-meta">Mar 8, 2026</div>
+          </div>
+
+          <div class="note">
+            <p class="note-text">
+              the best interfaces disappear. you stop noticing them because they
+              just work.
+            </p>
+            <div class="note-meta">Mar 3, 2026</div>
+          </div>
+
+          <div class="note">
+            <p class="note-text">
+              "Simplicity is the ultimate sophistication." &mdash; da Vinci
+            </p>
+            <div class="note-meta">Feb 27, 2026</div>
+          </div>
+        </section>
+      </div>
+
+      <footer>&copy; 2026 your name.</footer>
+    </div>
+  </body>
+</html>

@@ -1,13 +1,7 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/Container.astro";
-import FormattedDate from "@components/FormattedDate.astro";
-import { readingTime } from "@lib/utils";
-import BackToPrevious from "@components/BackToPrevious.astro";
-import PostNavigation from "@components/PostNavigation.astro";
-import TableOfContents from "@components/TableOfContents.astro";
-import Giscus from "@components/Giscus.astro";
+import TwoPanelLayout from "@layouts/TwoPanelLayout.astro";
+import { SITE } from "@consts";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
@@ -18,6 +12,7 @@ export async function getStaticPaths() {
     props: post,
   }));
 }
+
 type Props = CollectionEntry<"blog">;
 
 const posts = (await getCollection("blog"))
@@ -25,76 +20,398 @@ const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 function getNextPost() {
-  let postIndex;
   for (const post of posts) {
     if (post.id === Astro.params.id) {
-      postIndex = posts.indexOf(post);
-      return posts[postIndex + 1];
+      const idx = posts.indexOf(post);
+      return posts[idx + 1];
     }
   }
 }
 
 function getPrevPost() {
-  let postIndex;
   for (const post of posts) {
     if (post.id === Astro.params.id) {
-      postIndex = posts.indexOf(post);
-      return posts[postIndex - 1];
+      const idx = posts.indexOf(post);
+      return posts[idx - 1];
     }
   }
 }
 
 const nextPost = getNextPost();
 const prevPost = getPrevPost();
-
 const post = Astro.props;
-const { Content, headings } = await render(post);
+const { Content } = await render(post);
+const isMicro = post.data.type === "micro";
+
+const dateLong = post.data.date.toLocaleDateString("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+});
+const dateShort = post.data.date.toLocaleDateString("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+
+function navTitle(p: CollectionEntry<"blog">) {
+  return p.data.title || p.data.description;
+}
 ---
 
-<Layout title={post.data.title} description={post.data.description}>
-  <Container>
-    <div class="animate">
-      <BackToPrevious href="/blog">Back to blog</BackToPrevious>
+<TwoPanelLayout
+  title={post.data.title || post.data.description}
+  description={post.data.description}
+  articlePage={true}
+>
+  <div slot="left" class="article-left">
+    <!-- Site nav -->
+    <div class="site-nav">
+      <a href="/" class="site-title">{SITE.TITLE}</a>
+      <a href="/blog" class="nav-back">← All posts</a>
     </div>
-    <div class="my-10 space-y-1">
-      <div class="animate flex items-center gap-1.5">
-        <div class="font-base text-sm">
-          <FormattedDate date={post.data.date} />
+
+    {isMicro ? (
+      <!-- Micro post layout -->
+      <>
+        <div class="article-meta">
+          <span class="meta-date">{dateLong}</span>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <>
+              <span class="meta-dot">●</span>
+              <div class="tag-list">
+                {post.data.tags.map((tag) => (
+                  <span class="tag">#{tag}</span>
+                ))}
+              </div>
+            </>
+          )}
         </div>
-        &bull;
-        {post.body && (
-          <div class="font-base text-sm">
-            {readingTime(post.body)}
-          </div>
-        )}        
+
+        <p class="micro-lead">{post.data.description}</p>
+
+        <div class="article-body">
+          <Content />
+        </div>
+      </>
+    ) : (
+      <!-- Regular post layout -->
+      <>
+        <div class="tag-list tag-list-top">
+          {post.data.tags?.map((tag) => (
+            <span class="tag">#{tag}</span>
+          ))}
+        </div>
+
+        <div class="article-meta">
+          <span class="meta-date">{dateLong}</span>
+        </div>
+
+        <h1 class="article-title">{post.data.title}</h1>
+
+        <div class="article-body">
+          <Content />
+        </div>
+      </>
+    )}
+
+    <hr class="article-divider" />
+
+    <nav class="post-nav">
+      {prevPost ? (
+        <a href={`/blog/${prevPost.id}`} class="post-nav-item prev">
+          <span class="post-nav-label">← Previous</span>
+          <span class="post-nav-title">{navTitle(prevPost)}</span>
+        </a>
+      ) : <div />}
+      {nextPost ? (
+        <a href={`/blog/${nextPost.id}`} class="post-nav-item next">
+          <span class="post-nav-label">Next →</span>
+          <span class="post-nav-title">{navTitle(nextPost)}</span>
+        </a>
+      ) : <div />}
+    </nav>
+  </div>
+
+  <div slot="right" class="article-right">
+    <div class="right-meta">
+      <div class="right-section-label">About this post</div>
+      <div class="right-meta-row">
+        <span class="right-meta-key">Date</span>
+        <span class="right-meta-val">{dateShort}</span>
       </div>
-      <h1 class="animate text-3xl font-semibold text-black dark:text-white">
-        {post.data.title}
-      </h1>
-      {
-        post.data.tags && post.data.tags?.length > 0 ? (
-          <div class="animate flex gap-2 pt-1">
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="right-meta-row">
+          <span class="right-meta-key">Tags</span>
+          <div class="right-tags">
             {post.data.tags.map((tag) => (
-              <a
-                href={`/tags/${tag}`}
-                class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
-              >
-                {tag}
-              </a>
+              <span class="tag">#{tag}</span>
             ))}
           </div>
-        ) : null
-      }
+        </div>
+      )}
     </div>
-    {headings.length > 0 && <TableOfContents headings={headings} />}
-    <article class="animate">
-      <Content />
-      <div class="mt-24">
-        <PostNavigation prevPost={prevPost} nextPost={nextPost} />
-      </div>
-      <div class="mt-24">
-        <Giscus />
-      </div>
-    </article>
-  </Container>
-</Layout>
+
+    {!isMicro && post.data.description && (
+      <div class="right-excerpt">{post.data.description}</div>
+    )}
+  </div>
+</TwoPanelLayout>
+
+<style>
+  /* ── Left panel ── */
+  .article-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 56px;
+  }
+
+  .site-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .nav-back {
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .nav-back:hover { color: var(--text-primary); }
+
+  /* Tags */
+  .tag-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag-list-top {
+    margin-bottom: 20px;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+    background: var(--tag-bg);
+    border-radius: 99px;
+    padding: 3px 10px;
+  }
+
+  /* Meta */
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .meta-date {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meta-dot {
+    font-size: 8px;
+    color: var(--text-muted);
+    opacity: 0.4;
+  }
+
+  /* Regular post title */
+  .article-title {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+    max-width: 580px;
+  }
+
+  /* Micro lead */
+  .micro-lead {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text-primary);
+    line-height: 1.55;
+    margin-bottom: 48px;
+    max-width: 560px;
+  }
+
+  /* Article body */
+  .article-body {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-body);
+    line-height: 1.85;
+    max-width: 580px;
+  }
+
+  .article-body :global(p) { margin-bottom: 24px; }
+
+  .article-body :global(h2) {
+    font-family: var(--serif);
+    font-size: 21px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-top: 56px;
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .article-body :global(h3) {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 40px;
+    margin-bottom: 14px;
+  }
+
+  .article-body :global(a) {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+    transition: opacity 0.15s;
+  }
+
+  .article-body :global(a:hover) { opacity: 0.6; }
+
+  .article-body :global(blockquote) {
+    border-left: 2px solid var(--accent);
+    margin: 36px 0;
+    padding: 4px 0 4px 24px;
+    font-style: italic;
+    color: var(--text-muted);
+  }
+
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    padding-left: 20px;
+    margin-bottom: 24px;
+  }
+
+  .article-body :global(li) { margin-bottom: 8px; }
+
+  /* Divider */
+  .article-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 64px 0;
+    max-width: 580px;
+  }
+
+  /* Post nav */
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 580px;
+  }
+
+  .post-nav-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-decoration: none;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    background: rgba(250, 247, 240, 0.45);
+    border-radius: 10px;
+    transition: background 0.18s, border-color 0.18s;
+  }
+
+  .post-nav-item:hover {
+    background: rgba(250, 247, 240, 0.85);
+    border-color: rgba(80, 60, 30, 0.22);
+  }
+
+  .post-nav-item.next { text-align: right; }
+
+  .post-nav-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .post-nav-title {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.35;
+  }
+
+  /* ── Right panel ── */
+  .article-right {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .right-section-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .right-meta { margin-bottom: 32px; }
+
+  .right-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .right-meta-row:first-of-type { border-top: 1px solid var(--border); }
+
+  .right-meta-key {
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .right-meta-val {
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--text-primary);
+  }
+
+  .right-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .right-excerpt {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+</style>

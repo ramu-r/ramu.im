@@ -1,55 +1,173 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/Container.astro";
-import ArrowCard from "@components/ArrowCard.astro";
-import { BLOG } from "@consts";
+import TwoPanelLayout from "@layouts/TwoPanelLayout.astro";
+import PostCard from "@components/PostCard.astro";
+import MicroCard from "@components/MicroCard.astro";
+import { SITE, BLOG, AUTHOR } from "@consts";
 
 const data = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-type Acc = {
-  [year: string]: CollectionEntry<"blog">[];
-};
-
+type Acc = { [year: string]: CollectionEntry<"blog">[] };
 const posts = data.reduce((acc: Acc, post) => {
   const year = post.data.date.getFullYear().toString();
-  if (!acc[year]) {
-    acc[year] = [];
-  }
+  if (!acc[year]) acc[year] = [];
   acc[year].push(post);
   return acc;
 }, {});
-
 const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
 ---
 
-<Layout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
-  <Container>
-    <aside data-pagefind-ignore>
-      <div class="space-y-10">
-        <div class="space-y-4">
-          {
-            years.map((year) => (
-              <section class="animate space-y-4">
-                <div class="font-semibold text-black dark:text-white">
-                  {year}
-                </div>
-                <div>
-                  <ul class="not-prose flex flex-col gap-4">
-                    {posts[year].map((post) => (
-                      <li>
-                        <ArrowCard entry={post} />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </section>
-            ))
-          }
+<TwoPanelLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
+  <div slot="left" class="feed-left">
+    <div class="logo-circle">{SITE.TITLE[0]}</div>
+    <div class="site-title-large">{SITE.TITLE}</div>
+    <nav class="site-nav-links">
+      <a href="/blog" class="nav-link active">Writing</a>
+    </nav>
+
+    <div class="years-list">
+      {years.map((year) => (
+        <div class="year-group">
+          <div class="year-label">{year}</div>
+          <div class="post-list">
+            {posts[year].map((post) =>
+              post.data.type === "micro"
+                ? <MicroCard entry={post} />
+                : <PostCard entry={post} />
+            )}
+          </div>
         </div>
-      </div>
-    </aside>
-  </Container>
-</Layout>
+      ))}
+    </div>
+  </div>
+
+  <div slot="right" class="feed-right">
+    <div class="right-author-name">{AUTHOR.NAME}</div>
+    <div class="right-author-tagline">{AUTHOR.TAGLINE}</div>
+    <div class="right-about">
+      {AUTHOR.BIO.map(p => <p class="right-about-text">{p}</p>)}
+      <a href={`mailto:${SITE.EMAIL}`} class="right-email">{SITE.EMAIL}</a>
+    </div>
+  </div>
+</TwoPanelLayout>
+
+<style>
+  .feed-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    flex-shrink: 0;
+  }
+
+  .site-title-large {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 18px;
+  }
+
+  .site-nav-links {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 52px;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .nav-link:hover, .nav-link.active { color: var(--text-primary); }
+
+  .years-list {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .year-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .year-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    max-width: 500px;
+  }
+
+  /* ── Right panel ── */
+  .feed-right {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .right-author-name {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+
+  .right-author-tagline {
+    font-size: 12.5px;
+    font-weight: 300;
+    color: var(--text-muted);
+  }
+
+  .right-about {
+    margin-top: auto;
+  }
+
+  .right-about-text {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-body);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  .right-email {
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .right-email:hover { color: var(--text-primary); }
+</style>
