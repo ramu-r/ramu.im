@@ -1,19 +1,35 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/Container.astro";
-import BackToPrevious from "@components/BackToPrevious.astro";
+import ZenLayout from "@layouts/ZenLayout.astro";
 import { SITE } from "@consts";
 ---
 
-<Layout title="404" description={SITE.DESCRIPTION}>
-  <Container>
-    <div class="mt-16 grid place-items-center gap-3">
-      <h4 class="animate text-2xl font-semibold text-black dark:text-white">
-        404: Page not found
-      </h4>
-      <span class="animate">
-        <BackToPrevious href="/">Go to home page</BackToPrevious>
-      </span>
-    </div>
-  </Container>
-</Layout>
+<ZenLayout title="404" description={SITE.DESCRIPTION}>
+  <div class="notfound">
+    <span class="zen-logo" aria-hidden="true"></span>
+    <h1>404</h1>
+    <p>This page could not be found.</p>
+    <a href="/">← Go home</a>
+  </div>
+</ZenLayout>
+
+<style>
+  .notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-top: 4rem;
+  }
+
+  .notfound h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+
+  .notfound p {
+    color: var(--c-desc);
+    margin: 0;
+  }
+</style>

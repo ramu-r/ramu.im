@@ -1,7 +1,7 @@
 import type { Author, Metadata, Site, Socials } from "@types";
 
 export const SITE: Site = {
-  TITLE: "Forging Software",
+  TITLE: "Ramu Rajasekharan",
   DESCRIPTION: "Notes on building with care.\nProcess, patterns, and the thinking.",
   EMAIL: "mail@ramurajasekharan.com",
   NUM_POSTS_ON_HOMEPAGE: 5,
@@ -26,9 +26,9 @@ export const PROJECTS: Metadata = {
 
 export const AUTHOR: Author = {
   NAME: "Ramu Rajasekharan",
-  TAGLINE: "Fullstack developer",
+  TAGLINE: "reader, writer & coder",
   BIO: [
-    "I'm Ramu Rajasekharan, a fullstack developer with a focus on structure, simplicty and clarity.",
+    "curious about technology, politics, and morality, how they shape the way we live and think",
     "This blog is a space to share process notes, reflections and ideas, both finished and in-progress, on building systems with intentions.",
     "Writing is also a way of thinking I don't do enough of. A space where you're conscious of what you actually think. This is an attempt to be in that space more."
   ],

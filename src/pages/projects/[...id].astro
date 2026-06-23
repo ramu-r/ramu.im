@@ -1,12 +1,8 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/Container.astro";
-import FormattedDate from "@components/FormattedDate.astro";
+import ZenLayout from "@layouts/ZenLayout.astro";
+import SiteHeader from "@components/SiteHeader.astro";
 import { readingTime } from "@lib/utils";
-import BackToPrevious from "@components/BackToPrevious.astro";
-import Link from "@components/Link.astro";
-import TableOfContents from "@components/TableOfContents.astro";
 
 export async function getStaticPaths() {
   const projects = (await getCollection("projects"))
@@ -20,50 +16,70 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<"projects">;
 
 const project = Astro.props;
-const { Content, headings } = await render(project);
+const { Content } = await render(project);
+
+const dateLong = project.data.date.toLocaleDateString("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+});
 ---
 
-<Layout title={project.data.title} description={project.data.description}>
-  <Container>
-    <div class="animate">
-      <BackToPrevious href="/projects">Back to projects</BackToPrevious>
+<ZenLayout title={project.data.title} description={project.data.description}>
+  <SiteHeader active="projects" />
+
+  <article>
+    <div class="post-meta">
+      <span>{dateLong}</span>
+      {project.body && <span>{readingTime(project.body)}</span>}
     </div>
-    <div class="animate my-10 space-y-1">
-      <div class="flex items-center gap-1.5">
-        <div class="font-base text-sm">
-          <FormattedDate date={project.data.date} />
-        </div>
-        &bull;
-        {project.body && (
-          <div class="font-base text-sm">
-            {readingTime(project.body)}
-          </div>
-        )}     
-      </div>
-      <h1 class="text-3xl font-semibold text-black dark:text-white">
-        {project.data.title}
-      </h1>
-      {
-        (project.data.demoURL || project.data.repoURL) && (
-          <nav class="flex gap-1">
-            {project.data.demoURL && (
-              <Link href={project.data.demoURL} external>
-                demo
-              </Link>
-            )}
-            {project.data.demoURL && project.data.repoURL && <span>/</span>}
-            {project.data.repoURL && (
-              <Link href={project.data.repoURL} external>
-                repo
-              </Link>
-            )}
-          </nav>
-        )
-      }
-    </div>
-    <TableOfContents headings={headings} />
-    <article class="animate">
+
+    <h1 class="post-title">{project.data.title}</h1>
+
+    {(project.data.demoURL || project.data.repoURL) && (
+      <nav class="project-links">
+        {project.data.demoURL && (
+          <a href={project.data.demoURL} target="_blank" rel="noopener">demo</a>
+        )}
+        {project.data.demoURL && project.data.repoURL && <span class="sep">/</span>}
+        {project.data.repoURL && (
+          <a href={project.data.repoURL} target="_blank" rel="noopener">repo</a>
+        )}
+      </nav>
+    )}
+
+    <div class="zen-article">
       <Content />
-    </article>
-  </Container>
-</Layout>
+    </div>
+  </article>
+</ZenLayout>
+
+<style>
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.82rem;
+    color: var(--c-meta);
+    margin-bottom: 1.2rem;
+  }
+
+  .post-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0 0 0.8rem;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .project-links .sep { color: var(--c-meta); }
+</style>

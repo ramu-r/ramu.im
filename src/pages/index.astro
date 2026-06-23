@@ -1,161 +1,177 @@
 ---
-import TwoPanelLayout from "@layouts/TwoPanelLayout.astro";
-import PostCard from "@components/PostCard.astro";
-import MicroCard from "@components/MicroCard.astro";
+import ZenLayout from "@layouts/ZenLayout.astro";
+import SocialIcons from "@components/SocialIcons.astro";
 import { SITE, HOME, AUTHOR } from "@consts";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("blog"))
+const all = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const allWriting = all.filter((p) => p.data.type !== "micro");
+const writing = allWriting.slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+const hasMoreWriting = allWriting.length > SITE.NUM_POSTS_ON_HOMEPAGE;
+
+const notes = all.filter((p) => p.data.type === "micro").slice(0, 5);
+
+const monthYear = (d: Date) =>
+  d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+const fullDate = (d: Date) =>
+  d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 ---
 
-<TwoPanelLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
-  <div slot="left" class="feed-left">
-    <div class="logo-circle" aria-hidden="true"></div>
-    <a href="/" class="site-title-large">{SITE.TITLE}</a>
-    <p class="site-bio">{SITE.DESCRIPTION}</p>
+<ZenLayout title={HOME.TITLE} description={SITE.DESCRIPTION}>
+  <!-- <span class="zen-logo home-logo" aria-hidden="true"></span> -->
 
-    <div class="year-label">Recent</div>
-    <div class="post-list">
-      {posts.map((post) =>
-        post.data.type === "micro"
-          ? <MicroCard entry={post} />
-          : <PostCard entry={post} />
+  <h1 class="home-name">I'm {AUTHOR.NAME.split(" ")[0]}</h1>
+  <p class="byline">{AUTHOR.TAGLINE}</p>
+  <p class="bio">{AUTHOR.BIO[0]}</p>
+
+  <SocialIcons />
+
+  <div class="cols">
+    <section class="writing">
+      <h2 class="zen-h2">writing</h2>
+      {writing.map((post) => (
+        <>
+          <h3 class="entry-title">
+            <a href={`/blog/${post.id}`}>{post.data.title || post.data.description}</a>
+            {" "}<span class="entry-date">{monthYear(post.data.date)}</span>
+          </h3>
+          {post.data.title && post.data.description && (
+            <p class="entry-desc">{post.data.description}</p>
+          )}
+        </>
+      ))}
+      {hasMoreWriting && (
+        <div class="all-row">
+          <a href="/blog" class="all-link">all writing →</a>
+        </div>
       )}
-    </div>
+    </section>
 
-    <div class="all-posts-row">
-      <a href="/blog" class="all-posts-link">All posts →</a>
-    </div>
+    <section class="notes">
+      <h2 class="zen-h2">notes</h2>
+      {notes.length === 0 && (
+        <p class="entry-desc">No notes yet.</p>
+      )}
+      {notes.map((note) => (
+        <div class="note">
+          {note.data.link ? (
+            <>
+              <p class="note-text">{note.data.description}</p>
+              <a href={note.data.link.url} class="note-link-card" target="_blank" rel="noopener">
+                <span class="link-title">{note.data.link.title}</span>
+                <span class="link-domain">{new URL(note.data.link.url).hostname.replace(/^www\./, "")}</span>
+              </a>
+            </>
+          ) : (
+            <a href={`/blog/${note.id}`} class="note-link">
+              <p class="note-text">{note.data.description}</p>
+            </a>
+          )}
+          <div class="note-meta">{fullDate(note.data.date)}</div>
+        </div>
+      ))}
+    </section>
   </div>
-
-  <div slot="right" class="feed-right">
-    <div class="right-author-name">{AUTHOR.NAME}</div>
-    <div class="right-author-tagline">{AUTHOR.TAGLINE}</div>
-    <div class="right-about">
-      {AUTHOR.BIO.map(p => <p class="right-about-text">{p}</p>)}
-      <a href={`mailto:${SITE.EMAIL}`} class="right-email">{SITE.EMAIL}</a>
-    </div>
-  </div>
-</TwoPanelLayout>
+</ZenLayout>
 
 <style>
-  /* ── Left panel content ── */
-  .feed-left {
+  .home-logo {
+    display: block;
+    margin-bottom: 2.6rem;
+  }
+
+  .home-name {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.5rem;
+    line-height: 1.05;
+  }
+
+  .byline {
+    margin: 0 0 0.7rem;
+    font-size: 1.05rem;
+    color: var(--c-desc);
+  }
+
+  .bio {
+    margin: 0 0 1.8rem;
+    font-size: 1rem;
+    color: var(--c-desc);
+    line-height: 1.6;
+    max-width: 520px;
+  }
+
+  .cols {
     display: flex;
-    flex-direction: column;
+    gap: 4em;
+    margin-bottom: 1rem;
   }
 
-  .logo-circle {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1.5px solid var(--text-primary);
-    margin-bottom: 36px;
-    flex-shrink: 0;
+  .writing { flex: 1 1 65%; }
+  .notes { flex: 1 1 45%; }
+
+  @media (max-width: 640px) {
+    .cols {
+      flex-direction: column;
+      gap: 2.6rem;
+    }
+    .home-name { font-size: 2.4rem; }
   }
 
-  .site-title-large {
-    font-family: var(--serif);
-    font-size: 22px;
-    font-weight: 400;
-    color: var(--text-primary);
+  .writing :global(.entry-title:first-of-type) {
+    margin-top: 0;
+  }
+
+  .all-row {
+    margin-top: 1.6rem;
+  }
+
+  .all-link {
+    font-size: 0.85rem;
+    color: var(--c-meta);
+    text-decoration: none;
+  }
+
+  .all-link:hover { color: var(--c-fg); opacity: 1; }
+
+  .note-link {
     text-decoration: none;
     display: block;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    margin-bottom: 0;
   }
 
-  .site-bio {
-    font-size: 14px;
-    font-weight: 300;
-    color: var(--text-body);
-    line-height: 1.8;
-    max-width: 25rem;
-    margin-top: 20px;
-    margin-bottom: 52px;
-    white-space: pre-line;
+  .note-link:hover { opacity: 0.7; }
+
+  .note-link .note-text {
+    color: var(--c-fg);
   }
 
-  .year-label {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 14px;
-  }
-
-  .post-list {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    max-width: 500px;
-  }
-
-  .all-posts-row {
-    max-width: 500px;
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 16px;
-  }
-
-  .all-posts-link {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-muted);
+  .note-link-card {
+    display: block;
     text-decoration: none;
-    transition: color 0.15s;
+    margin-top: 6px;
   }
 
-  .all-posts-link:hover { color: var(--text-primary); }
+  .note-link-card:hover { opacity: 0.65; }
 
-  /* ── Right panel content ── */
-  .feed-right {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .right-author-name {
-    font-family: var(--serif);
-    font-size: 18px;
-    font-weight: 400;
-    color: var(--text-primary);
-    letter-spacing: -0.01em;
-    margin-bottom: 4px;
-  }
-
-  .right-author-tagline {
-    font-size: 12.5px;
-    font-weight: 300;
-    color: var(--text-muted);
-  }
-
-  .right-about {
-    margin-top: auto;
-  }
-
-  .right-about-text {
-    font-size: 13px;
-    font-weight: 300;
-    color: var(--text-body);
-    line-height: 1.7;
-    margin-bottom: 14px;
-  }
-
-  .right-email {
-    font-size: 12.5px;
-    font-weight: 400;
-    color: var(--text-muted);
-    text-decoration: underline;
-    text-decoration-color: var(--accent);
+  .note-link-card :global(.link-title) {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--c-link);
+    text-decoration-line: underline;
     text-underline-offset: 3px;
-    transition: color 0.15s;
+    text-decoration-thickness: 1px;
   }
 
-  .right-email:hover { color: var(--text-primary); }
+  .note-link-card :global(.link-domain) {
+    font-size: 0.85rem;
+    color: var(--c-meta);
+  }
+
+  .note-link-card :global(.link-domain)::before {
+    content: " — ";
+  }
 </style>

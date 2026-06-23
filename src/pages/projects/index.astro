@@ -1,8 +1,7 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/Container.astro";
-import ArrowCard from "@components/ArrowCard.astro";
+import ZenLayout from "@layouts/ZenLayout.astro";
+import SiteHeader from "@components/SiteHeader.astro";
 import { PROJECTS } from "@consts";
 
 const projects = (await getCollection("projects"))
@@ -10,23 +9,32 @@ const projects = (await getCollection("projects"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<Layout title={PROJECTS.TITLE} description={PROJECTS.DESCRIPTION}>
-  <Container>
-    <aside data-pagefind-ignore>
-      <div class="space-y-10">
-        <div class="animate font-semibold text-black dark:text-white">
-          Projects
-        </div>
-        <ul class="animate not-prose flex flex-col gap-4">
-          {
-            projects.map((project) => (
-              <li>
-                <ArrowCard entry={project} />
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </aside>
-  </Container>
-</Layout>
+<ZenLayout title={PROJECTS.TITLE} description={PROJECTS.DESCRIPTION}>
+  <SiteHeader active="projects" />
+
+  <h1 class="page-title">Projects</h1>
+
+  <section>
+    {projects.map((project) => (
+      <>
+        <h3 class="entry-title">
+          <a href={`/projects/${project.id}`}>{project.data.title}</a>
+        </h3>
+        <p class="entry-desc">{project.data.description}</p>
+      </>
+    ))}
+  </section>
+</ZenLayout>
+
+<style>
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 2.4rem;
+  }
+
+  section :global(.entry-title:first-of-type) {
+    margin-top: 0;
+  }
+</style>

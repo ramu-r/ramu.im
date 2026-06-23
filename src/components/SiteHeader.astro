@@ -1,0 +1,100 @@
+---
+import { SITE } from "@consts";
+
+interface Props {
+  active?: "blog" | "projects" | "tags";
+}
+
+const { active } = Astro.props;
+const links = [
+  { href: "/blog", label: "writing", key: "blog" },
+  { href: "/projects", label: "projects", key: "projects" },
+];
+---
+
+<header class="site-header">
+  <a href="/" class="brand" aria-label="Home">
+    <span class="zen-logo" aria-hidden="true"></span>
+    <span class="brand-title">{SITE.TITLE}</span>
+  </a>
+  <nav class="site-nav">
+    {links.map((l) => (
+      <a href={l.href} class:list={["nav-link", active === l.key && "active"]}>
+        {l.label}
+      </a>
+    ))}
+    <button id="magnifying-glass" aria-label="Search" class="nav-search">
+      <svg height="15" viewBox="0 0 16 16" width="15" fill="currentColor">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M3.5 7C3.5 5.067 5.067 3.5 7 3.5C8.933 3.5 10.5 5.067 10.5 7C10.5 7.88461 10.1718 8.69256 9.63058 9.30876L9.30876 9.63058C8.69256 10.1718 7.88461 10.5 7 10.5C5.067 10.5 3.5 8.933 3.5 7ZM9.96544 11.0261C9.13578 11.6382 8.11014 12 7 12C4.23858 12 2 9.76142 2 7C2 4.23858 4.23858 2 7 2C9.76142 2 12 4.23858 12 7C12 8.11014 11.6382 9.13578 11.0261 9.96544L14.0303 12.9697L14.5607 13.5L13.5 14.5607L12.9697 14.0303L9.96544 11.0261Z"
+        ></path>
+      </svg>
+    </button>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .brand-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--c-fg);
+  }
+
+  .brand:hover {
+    opacity: 1;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .nav-link {
+    font-size: 0.85rem;
+    color: var(--c-meta);
+    text-decoration: none;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--c-fg);
+    opacity: 1;
+  }
+
+  .nav-search {
+    display: grid;
+    place-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--c-divider);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--c-meta);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .nav-search:hover {
+    color: var(--c-fg);
+    border-color: var(--c-meta);
+  }
+</style>

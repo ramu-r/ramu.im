@@ -2,42 +2,66 @@
 
 @plugin '@tailwindcss/typography';
 
-@custom-variant dark (&:is(.dark *));
+/* System-driven dark mode: every `dark:` utility now follows prefers-color-scheme. */
+@custom-variant dark (@media (prefers-color-scheme: dark));
 
 @theme {
-  --font-sans: Geist Sans, ui-sans-serif, system-ui, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-mono: Geist Mono, ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-sans: "Bricolage Grotesque", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
 }
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
+/* ───────────────────────── Zen palette ───────────────────────── */
+:root {
+  --zen-paper: #f2f0e3;
+  --zen-dark: #2e2e2e;
+  --zen-primary: #405dff;
+  --zen-teal: #62fbd5;
+  --zen-coral: #f76f53;
 
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+  --c-bg: var(--zen-paper);
+  --c-fg: var(--zen-dark);
+  --c-link: var(--zen-coral);
+  --c-accent: var(--zen-primary);
+  --c-featured-bg: rgba(64, 93, 255, 0.07);
+  --c-featured-border: var(--zen-primary);
+  --c-label: #8a8777;
+  --c-meta: #9b9888;
+  --c-desc: #524f46;
+  --c-divider: #dddaca;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-bg: var(--zen-dark);
+    --c-fg: var(--zen-paper);
+    --c-link: var(--zen-teal);
+    --c-accent: var(--zen-teal);
+    --c-featured-bg: rgba(98, 251, 213, 0.07);
+    --c-featured-border: var(--zen-teal);
+    --c-label: #8a8880;
+    --c-meta: #7a7870;
+    --c-desc: #c4c2b5;
+    --c-divider: #3e3e3e;
+  }
+}
+
+/* Tailwind v4 default border-color compat */
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--c-divider);
   }
 }
 
 @layer utilities {
   html {
     overflow-y: auto;
-    color-scheme: light;
     scroll-padding-top: 100px;
-  }
-
-  html.dark {
-    color-scheme: dark;
+    color-scheme: light dark;
   }
 
   html,
@@ -47,103 +71,321 @@
 
   body {
     @apply font-sans antialiased;
-    @apply flex flex-col;
-    @apply bg-neutral-100 dark:bg-neutral-900;
-    @apply text-black/75 dark:text-white/75;
-  }
-
-  header {
-    @apply fixed left-0 right-0 top-0 z-50 py-6;
-    @apply bg-neutral-100/75 dark:bg-neutral-900/75;
-    @apply saturate-200 backdrop-blur-xs;
-  }
-
-  main {
-    @apply flex-1 py-32;
-  }
-
-  footer {
-    @apply py-6 text-sm;
-  }
-
-  article {
-    @apply prose prose-neutral max-w-full dark:prose-invert prose-img:mx-auto prose-img:my-auto;
-    @apply prose-headings:font-semibold;
-    @apply prose-headings:text-black dark:prose-headings:text-white;
+    background: var(--c-bg);
+    color: var(--c-fg);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    font-weight: 400;
   }
 }
 
-@layer utilities {
-  article a {
-    @apply font-sans text-current underline underline-offset-[3px];
-    @apply decoration-black/30 dark:decoration-white/30;
-    @apply transition-colors duration-300 ease-in-out;
-  }
-  article a:hover {
-    @apply text-black dark:text-white;
-    @apply decoration-black/50 dark:decoration-white/50;
+/* ───────────────────────── Base links ───────────────────────── */
+a:link,
+a:visited {
+  color: var(--c-link);
+  text-decoration-line: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  opacity: 0.75;
+}
+
+/* ───────────────────────── Page shell ───────────────────────── */
+.container {
+  max-width: 720px;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem 4rem;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 1rem 3rem;
   }
 }
 
+/* ───────────────────────── Logo ───────────────────────── */
+.zen-logo {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--c-fg);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* ───────────────────────── Section labels (h2) ───────────────────────── */
+.zen-h2 {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-label);
+  margin: 0 0 1.2rem;
+  border-bottom: 1px solid var(--c-divider);
+  padding-bottom: 0.65rem;
+}
+
+/* ───────────────────────── Entry list (writing) ───────────────────────── */
+.entry-title {
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 1.5rem 0 0.25rem;
+  line-height: 1.35;
+}
+
+.entry-title a:link,
+.entry-title a:visited {
+  color: var(--c-fg);
+  text-decoration: none;
+}
+
+.entry-title a:hover {
+  color: var(--c-link);
+  opacity: 1;
+}
+
+.entry-date {
+  font-weight: 400;
+  font-size: 0.78em;
+  color: var(--c-meta);
+}
+
+.entry-desc {
+  margin: 0;
+  font-size: 0.96rem;
+  color: var(--c-desc);
+  line-height: 1.55;
+}
+
+/* ───────────────────────── Notes ───────────────────────── */
+.note {
+  padding: 1rem 0;
+}
+
+.note + .note {
+  border-top: 1px solid var(--c-divider);
+}
+
+.note-text {
+  font-size: 0.96rem;
+  color: var(--c-fg);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.note-text a:link,
+.note-text a:visited {
+  color: var(--c-link);
+  text-decoration-line: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.note-quote {
+  border-left: 2.5px solid var(--c-accent);
+  padding-left: 12px;
+  color: var(--c-desc);
+  font-style: italic;
+  margin: 0;
+}
+
+.note-meta {
+  font-size: 0.8rem;
+  color: var(--c-meta);
+  margin-top: 5px;
+}
+
+/* ───────────────────────── Footer ───────────────────────── */
+.zen-footer {
+  margin-top: 3.5rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--c-divider);
+  font-size: 0.84rem;
+  color: var(--c-meta);
+}
+
+.zen-footer a:link,
+.zen-footer a:visited {
+  color: var(--c-meta);
+}
+
+/* ───────────────────────── Article (blog / project detail) ───────────────────────── */
+.zen-article {
+  font-size: 1rem;
+  color: var(--c-desc);
+  line-height: 1.75;
+  max-width: 100%;
+}
+
+.zen-article > * + * {
+  margin-top: 1.4rem;
+}
+
+.zen-article h1,
+.zen-article h2,
+.zen-article h3,
+.zen-article h4 {
+  color: var(--c-fg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-top: 2.6rem;
+}
+
+.zen-article h2 {
+  font-size: 1.4rem;
+}
+
+.zen-article h3 {
+  font-size: 1.15rem;
+}
+
+.zen-article a:link,
+.zen-article a:visited {
+  color: var(--c-link);
+}
+
+.zen-article strong {
+  color: var(--c-fg);
+  font-weight: 600;
+}
+
+.zen-article ul,
+.zen-article ol {
+  padding-left: 1.4rem;
+}
+
+.zen-article li {
+  margin-top: 0.4rem;
+}
+
+.zen-article blockquote {
+  border-left: 2.5px solid var(--c-accent);
+  padding-left: 16px;
+  color: var(--c-desc);
+  font-style: italic;
+}
+
+.zen-article img {
+  border-radius: 8px;
+  margin-inline: auto;
+}
+
+.zen-article hr {
+  border: none;
+  border-top: 1px solid var(--c-divider);
+  margin: 2.6rem 0;
+}
+
+.zen-article kbd {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  background: var(--c-featured-bg);
+  border: 1px solid var(--c-divider);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+/* ───────────────────────── Code blocks ───────────────────────── */
+.zen-article :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--c-featured-bg);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+pre {
+  background: var(--astro-code-background) !important;
+  border: 1px solid var(--c-divider);
+  border-radius: 8px;
+  padding: 1.2rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+pre code {
+  font-family: var(--font-mono);
+}
+
+/* Scroll reveal animation (driven by Head/Layout script) */
 .animate {
-  @apply -translate-y-3 opacity-0;
-  @apply transition-all duration-300 ease-out;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
 .animate.show {
-  @apply translate-y-0 opacity-100;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 html #back-to-top {
-  @apply pointer-events-none opacity-0;
+  pointer-events: none;
+  opacity: 0;
 }
 
 html.scrolled #back-to-top {
-  @apply pointer-events-auto opacity-100;
-}
-
-/* shiki config */
-pre {
-  @apply border border-black/15 py-5 dark:border-white/20;
-}
-
-:root {
-  --astro-code-foreground: #09090b;
-  --astro-code-background: #fafafa;
-  --astro-code-token-comment: #a19595;
-  --astro-code-token-keyword: #f47067;
-  --astro-code-token-string: #00a99a;
-  --astro-code-token-function: #429996;
-  --astro-code-token-constant: #2b70c5;
-  --astro-code-token-parameter: #4e8fdf;
-  --astro-code-token-string-expression: #ae42a0;
-  --astro-code-token-punctuation: #8996a3;
-  --astro-code-token-link: #8d85ff;
-}
-
-.dark {
-  --astro-code-foreground: #fafafa;
-  --astro-code-background: #09090b;
-  --astro-code-token-comment: #a19595;
-  --astro-code-token-keyword: #f47067;
-  --astro-code-token-string: #00a99a;
-  --astro-code-token-function: #6eafad;
-  --astro-code-token-constant: #b3cceb;
-  --astro-code-token-parameter: #4e8fdf;
-  --astro-code-token-string-expression: #bf7db6;
-  --astro-code-token-punctuation: #8996a3;
-  --astro-code-token-link: #8d85ff;
+  pointer-events: auto;
+  opacity: 1;
 }
 
 /* copy code button on codeblocks */
 .copy-code {
-  @apply absolute right-3 top-3 grid size-9 place-content-center rounded-sm border border-black/15 bg-neutral-100 text-center duration-300 ease-in-out dark:border-white/20 dark:bg-neutral-900;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  display: grid;
+  place-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--c-divider);
+  border-radius: 6px;
+  background: var(--c-bg);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: opacity 0.2s;
 }
 
 .copy-code:hover {
-  @apply bg-[#E9E9E9] transition-colors dark:bg-[#232323];
+  opacity: 0.7;
 }
 
 .copy-code:active {
-  @apply scale-90 transition-transform;
+  transform: scale(0.92);
+}
+
+/* ───────────────────────── Shiki (css-variables theme) ───────────────────────── */
+:root {
+  --astro-code-foreground: #2e2e2e;
+  --astro-code-background: rgba(0, 0, 0, 0.04);
+  --astro-code-token-comment: #9b9888;
+  --astro-code-token-keyword: #f76f53;
+  --astro-code-token-string: #2f8f6f;
+  --astro-code-token-function: #405dff;
+  --astro-code-token-constant: #405dff;
+  --astro-code-token-parameter: #524f46;
+  --astro-code-token-string-expression: #2f8f6f;
+  --astro-code-token-punctuation: #8a8777;
+  --astro-code-token-link: #405dff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --astro-code-foreground: #f2f0e3;
+    --astro-code-background: rgba(255, 255, 255, 0.04);
+    --astro-code-token-comment: #7a7870;
+    --astro-code-token-keyword: #62fbd5;
+    --astro-code-token-string: #9be3c8;
+    --astro-code-token-function: #8fa3ff;
+    --astro-code-token-constant: #8fa3ff;
+    --astro-code-token-parameter: #c4c2b5;
+    --astro-code-token-string-expression: #9be3c8;
+    --astro-code-token-punctuation: #8a8880;
+    --astro-code-token-link: #62fbd5;
+  }
 }

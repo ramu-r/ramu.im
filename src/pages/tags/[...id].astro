@@ -1,17 +1,11 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/Container.astro";
-import ArrowCard from "@components/ArrowCard.astro";
-import BackToPrevious from "@components/BackToPrevious.astro";
+import ZenLayout from "@layouts/ZenLayout.astro";
+import SiteHeader from "@components/SiteHeader.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
-
-  // Get unique tags
   const tags = [...new Set(posts.flatMap((post) => post.data.tags || []))];
-
-  // Create paths for each tag
   return tags.map((tag) => ({
     params: { id: tag },
     props: {
@@ -23,22 +17,50 @@ export async function getStaticPaths() {
 const { id } = Astro.params;
 const { posts } = Astro.props;
 
-// Sort posts by date, most recent first
 const sortedPosts = posts.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
+
+const monthDay = (d: Date) =>
+  d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 ---
 
-<Layout title={`Tag: ${id}`} description={`Posts with the tag: ${id}`}>
-  <Container>
-    <div class="space-y-10" data-pagefind-ignore>
-      <BackToPrevious href="/tags"> All tags </BackToPrevious>
-      <h1 class="animate font-semibold text-black dark:text-white">
-        Posts tagged with "{id}"
-      </h1>
-      <ul class="animate flex flex-col gap-4">
-        {sortedPosts.map((post) => <ArrowCard entry={post} />)}
-      </ul>
-    </div>
-  </Container>
-</Layout>
+<ZenLayout title={`Tag: ${id}`} description={`Posts with the tag: ${id}`}>
+  <SiteHeader active="tags" />
+
+  <h1 class="page-title">#{id}</h1>
+
+  <section>
+    {sortedPosts.map((post) => (
+      <>
+        <h3 class="entry-title">
+          <a href={`/blog/${post.id}`}>{post.data.title || post.data.description}</a>
+          {" "}<span class="entry-date">{monthDay(post.data.date)}</span>
+        </h3>
+        {post.data.title && post.data.description && (
+          <p class="entry-desc">{post.data.description}</p>
+        )}
+      </>
+    ))}
+  </section>
+
+  <p class="back"><a href="/tags">← all tags</a></p>
+</ZenLayout>
+
+<style>
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 2.4rem;
+  }
+
+  section :global(.entry-title:first-of-type) {
+    margin-top: 0;
+  }
+
+  .back {
+    margin-top: 2.4rem;
+    font-size: 0.9rem;
+  }
+</style>

@@ -2,6 +2,7 @@
 title: "Projects Collection"
 description: "How to add projects to your portfolio."
 date: "2024-03-20"
+draft: true
 tags:
   - tutorial
 ---
@@ -34,7 +35,7 @@ In the above example, two project posts will be generated with the folder name r
 title: "Astro Micro";
 description: "Astro Micro is an accessible theme for Astro.";
 date: "2024-03-20";
-draft: false;
+draft: true
 ---
 ```
 
@@ -56,7 +57,7 @@ All that's left to do is write the content under the metadata.
 title: "Astro Micro";
 description: "Astro Micro is an accessible theme for Astro";
 date: "2024-03-20";
-draft: false;
+draft: true
 ---
 
 ## Astro Micro 🔬

@@ -10,6 +10,10 @@ const blog = defineCollection({
     draft: z.boolean().optional(),
     tags: z.array(z.string()).optional(),
     type: z.enum(["post", "micro"]).optional(),
+    link: z.object({
+      url: z.string(),
+      title: z.string(),
+    }).optional(),
   }),
 });
 

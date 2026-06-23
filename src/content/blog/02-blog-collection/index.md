@@ -2,6 +2,7 @@
 title: "Blog Collection"
 description: "How to add posts to the blog."
 date: "2024-03-21"
+draft: true
 tags:
   - tutorial
 ---
@@ -36,7 +37,7 @@ Metadata is required for each post.
 title: "Blog Collection";
 description: "How to add posts to the blog.";
 date: "2024-03-21";
-draft: false;
+draft: true
 tags:
   - tutorial
 ---
@@ -59,7 +60,7 @@ All that's left to do is write the content under the metadata.
 title: "Blog Collection";
 description: "How to add posts to the blog.";
 date: "2024-03-21";
-draft: false;
+draft: true
 tags:
   - tutorial
 ---
