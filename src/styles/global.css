@@ -212,6 +212,16 @@ a:hover {
   color: var(--c-meta);
 }
 
+.footer-bio {
+  margin: 0 0 0.5rem;
+  line-height: 1.6;
+  max-width: 560px;
+}
+
+.footer-copy {
+  margin: 1rem 0 0;
+}
+
 /* ───────────────────────── Article (blog / project detail) ───────────────────────── */
 .zen-article {
   font-size: 1rem;

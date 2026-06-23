@@ -66,7 +66,9 @@ const pageTitle = `${title} | ${SITE.TITLE}`;
     <div class="container">
       <slot />
       <footer class="zen-footer">
-        &copy; {new Date().getFullYear()} {AUTHOR.NAME}.
+        <p class="footer-bio">{AUTHOR.BIO[1]}</p>
+        <p class="footer-bio">{AUTHOR.BIO[2]}</p>
+        <p class="footer-copy">&copy; {new Date().getFullYear()} {AUTHOR.NAME}.</p>
       </footer>
     </div>
 
