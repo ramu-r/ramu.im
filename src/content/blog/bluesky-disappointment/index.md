@@ -38,25 +38,23 @@ I'm not sure if it's because I'm yet to come across the groups and people that m
 
 ## Why I even tried it
 
-I've always been a reddit guy and I've always hated Twitter and Instagram-style social media. Instagram's focus on sharing pictures and videos quickly degrades into engagement bait, and Twitter's character limits eventually force you to farm rage bait for attention. With the world moving on to algorithmic feeds, these trends only got worse.
+**I've always been a reddit person.** I've never gotten along with Twitter and Instagram-style social media. Instagram degrades into engagement bait, and Twitter's character limits eventually push you toward farming rage for attention. With the world moving to algorithmic feeds, these trends only got worse, and text-based social media like forums and reddit has been slowly dying out. I've been feeling pretty out of place in the current social media landscape.
 
-Normal text based social media like forums or reddit has been getting more and more extinct and I've been feeling pretty out of place in the current social media landscape.
-
-It didn't help that reddit made things worse and actively made me feel that social media does not work. My only solace has been places like Hacker News or smaller groups on Telegram where thoughtful discussions happen. But even Hacker News easily veers into long winded debates about tangential topics sometimes, and Telegram really isn't made for the kind of well thought out answers I used to find valuable about reddit.
+**Reddit didn't help either.** It actively made me feel that social media just doesn't work. My only solace has been places like Hacker News or smaller Telegram groups where thoughtful discussions happen. But even Hacker News easily veers into long winded debates about tangential topics, and Telegram really isn't made for the kind of well thought out answers I used to find valuable about reddit.
 
 ## What I tried before
 
-I had tried both Scuttlebutt and Nostr before and found both of them lacking. Scuttlebutt didn't allow deleting older posts and I found the thought of filling my phone with social media slop horrifying. Nostr was too focused on bitcoin so much that it pushed out any other discussion.
+**Scuttlebutt and Nostr both let me down.** Scuttlebutt didn't allow deleting older posts and I found the thought of filling my phone with social media slop horrifying. Nostr was so focused on bitcoin that it pushed out any other discussion.
 
-I wasn't too excited about Mastodon or ActivityPub either because it required me to run my own servers, and running my own services quickly devolved into a full time sysadmin job.
+**Mastodon wasn't the answer either.** It required running your own servers, which quickly devolved into a full time sysadmin job.
 
-By this point I had somewhat lost hope on social media. I never tried Bluesky before because I had heard it was run by a VC funded company and it was centralized.
+**By this point I'd mostly given up.** I never tried Bluesky before because I had heard it was run by a VC funded company and it was centralized.
 
 ## What brought me here
 
-One day the government of India banned Telegram. That made me pretty conscious about how precarious my social media was, and it was in the back of my mind that I should find something a bit more resistant to government censure. In those few days, Dan had written that article on Bluesky, and it made me curious how Bluesky handled identities across instances.
+**Then India banned Telegram.** That made me pretty conscious of how precarious my social media was, and it was in the back of my mind that I should find something a bit more resistant to government censure. In those few days, Dan had written that article on Bluesky, and it made me curious how Bluesky handled identities across instances.
 
-After a bit of searching, I understood Bluesky is basically a distributed version of all the things traditional social media rolls into one monolith. Our identities, the data we post, the network we connect to, and what shows up in our recommendations -- all of these could be set up as different pieces, mixed and matched as we see fit.
+**The protocol made sense once I dug in.** Bluesky is basically a distributed version of all the things traditional social media rolls into one monolith. Our identities, the data we post, the network we connect to, and what shows up in our recommendations -- all of these could be set up as different pieces, mixed and matched as we see fit.
 
 ## What appealed to me
 
@@ -67,14 +65,12 @@ After a bit of searching, I understood Bluesky is basically a distributed versio
 
 ## Where it fell short
 
-As much as the idea was exciting, the reality didn't live up to what I had expected.
+**Identity isn't really yours.** Bluesky does not support domain based DIDs, and I'm forced to use one on Bluesky's PLC. Yes I can sign it with my domain, but it's still a PLC DID and not a `did:web` one. And as much as different parts of the protocol could be mixed and matched, many parts are still maintained by Bluesky with no real alternatives. I could be wrong but I didn't find an easy-to-run alternative for the AppView.
 
-Bluesky does not support domain based DIDs, and I'm forced to use one on Bluesky's PLC. Yes I can sign it with my domain, but it's still a PLC DID and not a `did:web` one. And as much as different parts of the protocol could be mixed and matched, many parts are still maintained by Bluesky with no real alternatives. I could be wrong but I didn't find an easy-to-run alternative for the AppView.
-
-The discussions didn't have the toxicity I had come across on Twitter or reddit, but it still felt like I was missing something. I still remember early reddit, and the earlier days of the internet where I could come across something new and interesting every day. Maybe I'm just saturated now. Or maybe it's partly the default posts getting pushed to my feed since I'm following nobody. I'm hoping some careful curation fixes that.
+**The content felt flat.** The discussions didn't have the toxicity I had come across on Twitter or reddit, but it still felt like I was missing something. I still remember early reddit, and the earlier days of the internet where I could come across something new and interesting every day. Maybe I'm just saturated now. Or maybe it's partly the default posts getting pushed to my feed since I'm following nobody. I'm hoping some careful curation fixes that.
 
 ## What was good
 
-The custom feeds and the starter packs were good. It was a relief that I could always switch to a different section or view of the ecosystem and I'm not stuck on what I find there initially.
+**The custom feeds and starter packs were a relief.** I could always switch to a different section or view of the ecosystem and I'm not stuck on what I find there initially.
 
-Unlike YouTube or Facebook, Bluesky lets me mark what I don't find interesting. I'm hoping in a few days the algorithm will show me less American politics.
+**Unlike YouTube or Facebook, Bluesky lets me mark what I don't find interesting.** I'm hoping in a few days the algorithm will show me less American politics.
