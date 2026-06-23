@@ -10,7 +10,7 @@ export const SITE: Site = {
 
 export const HOME: Metadata = {
   TITLE: "Home",
-  DESCRIPTION: "Astro Micro is an accessible theme for Astro.",
+  DESCRIPTION: SITE.DESCRIPTION,
 };
 
 export const BLOG: Metadata = {
@@ -36,15 +36,15 @@ export const AUTHOR: Author = {
 
 export const SOCIALS: Socials = [
   {
-    NAME: "X (formerly Twitter)",
-    HREF: "https://twitter.com/boogerbuttcheek",
+    NAME: "Email",
+    HREF: `mailto:${SITE.EMAIL}`,
   },
   {
     NAME: "GitHub",
-    HREF: "https://github.com/trevortylerlee",
+    HREF: "https://github.com/ramu-r",
   },
   {
-    NAME: "Website",
-    HREF: "https://trevortylerlee.com",
+    NAME: "Bluesky",
+    HREF: "https://bsky.app/profile/ramu-r",
   },
 ];

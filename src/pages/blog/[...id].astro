@@ -2,7 +2,7 @@
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import ZenLayout from "@layouts/ZenLayout.astro";
 import SiteHeader from "@components/SiteHeader.astro";
-import Giscus from "@components/Giscus.astro";
+
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
@@ -80,9 +80,6 @@ const navTitle = (p: CollectionEntry<"blog">) =>
     ) : <span />}
   </nav>
 
-  <div class="comments">
-    <Giscus />
-  </div>
 </ZenLayout>
 
 <style>
