@@ -1,5 +1,5 @@
 ---
-description: "The article that finally made me try Bluesky."
+description: "The article that got me excited about atproto and made me try Bluesky."
 date: "2026-06-23"
 type: "micro"
 tags: ["atproto", "social-media"]

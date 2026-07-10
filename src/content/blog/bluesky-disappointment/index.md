@@ -1,19 +1,21 @@
 ---
-title: "I tried Bluesky and I was disappointed"
-description: "The decentralized Twitter alternative has promise, but it didn't deliver on what matters most."
+title: "Disappointed by Bluesky, excited about atproto"
+description: "The decentralized Twitter alternative has promise, but it left me wanting."
 date: "2026-06-23"
 ---
 
-I'm not sure if it's because I haven't found the right feeds yet. It was [this article](https://overreacted.io/there-are-no-instances-in-atproto/) and its related HN discussion that made me want to try this. I didn't find it very exciting but I really hope Bluesky works out though.
+I'm still hopeful. I'm not sure if it's because I haven't found the right feeds yet. Even thought I didn't find it very exciting, I really hope Bluesky works out.
 
-**I've been missing social media for a while.** Instagram is built around pictures, and pictures quickly become about grabbing attention rather than saying anything. Twitter doesn't allow longer discussions, so everything collapses into one-liner rage bait. When the world moved to algorithmic feeds, these trends only got worse. 
+What made me try it out in the first place was that, **I've been missing social media for a while.** Instagram is built around pictures, and pictures quickly become about grabbing attention rather than saying anything. Twitter doesn't allow longer discussions, so everything collapses into one-liner rage bait. When the world moved to algorithmic feeds, these trends only got worse. 
 
 Text-based social media has been slowly dying out and I've been feeling pretty out of place in the current social media landscape. Reddit making things worse didn't help. My only solace has been places like Hacker News or smaller Telegram groups, but even those have their own limitations.
 
-**I had had a go at the alternatives.** Scuttlebutt didn't allow deleting older posts and I found the thought of filling my phone with social media slop horrifying. Nostr was so focused on bitcoin that it pushed out any other discussion. Mastodon required running your own servers, which knowing me would quickly devolve into a full time sysadmin job. I never tried Bluesky before because I'd heard it was VC funded and centralized.
+**I had had a go at the alternatives.** Scuttlebutt didn't allow deleting older posts and I found the thought of filling my phone with social media slop horrifying. Nostr was so focused on bitcoin that it pushed out any other discussion. Mastodon required running your own servers, which knowing me would quickly devolve into a full time sysadmin job. I never tried Bluesky before because I'd heard it was VC funded and centralized, felt like another twitter.
 
 
-**Then India banned Telegram** in the third week of June. That made me conscious of how precarious my social media was, and it was in the back of my mind that I should find something more resistant to government censure. [This article on ATProto](https://overreacted.io/there-are-no-instances-in-atproto/) landed at the right moment. Once I dug in, the protocol made sense: it divides identity, data, the social graph, and recommendations into separate pieces you can mix and match. The idea that I could always wrap up my data and go elsewhere was refreshing. 
+**Then India banned Telegram** in the third week of June. That made me conscious of how precarious my social media was, and it was in the back of my mind that I should find something more reslient to government censure. I wouldn't want all my posts and comments gone at the drop of a hat.
+
+ [This article on ATProto](https://overreacted.io/there-are-no-instances-in-atproto/) too landed in those exact same days. And I found the the protocol exciting. It divides identity, data, the social graph, and recommendations into separate pieces you can mix and match. The idea that I could always wrap up my data and go elsewhere was refreshing. 
 
 The parts that appealed to me the most were
 

@@ -151,6 +151,7 @@ a:hover {
   font-weight: 400;
   font-size: 0.78em;
   color: var(--c-meta);
+  white-space: nowrap;
 }
 
 .entry-desc {
@@ -224,7 +225,7 @@ a:hover {
 
 /* ───────────────────────── Article (blog / project detail) ───────────────────────── */
 .zen-article {
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: var(--c-desc);
   line-height: 1.75;
   max-width: 100%;
@@ -290,6 +291,7 @@ a:hover {
 .zen-article img {
   border-radius: 8px;
   margin-inline: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .zen-article hr {

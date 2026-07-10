@@ -28,23 +28,24 @@ export const AUTHOR: Author = {
   NAME: "Ramu Rajasekharan",
   TAGLINE: "reader, writer & coder",
   BIO: [
-    "curious about technology, politics, and morality, how they shape the way we live and think",
+    "curious how technology and tools, the role they play in shaping ideas and thought",
     "This blog is a space to share process notes, reflections and ideas, both finished and in-progress, on building systems with intentions.",
-    "Writing is also a way of thinking I don't do enough of. A space where you're conscious of what you actually think. This is an attempt to be in that space more."
+    "Written by a human. Everything in this blog comes from a human. Sometimes LLMs are used to proofread."
   ],
 };
 
 export const SOCIALS: Socials = [
-  {
-    NAME: "Email",
-    HREF: `mailto:${SITE.EMAIL}`,
+    {
+    NAME: "Bluesky",
+    HREF: "https://bsky.app/profile/ramu-r",
   },
   {
     NAME: "GitHub",
     HREF: "https://github.com/ramu-r",
   },
   {
-    NAME: "Bluesky",
-    HREF: "https://bsky.app/profile/ramu-r",
-  },
+    NAME: "Email",
+    HREF: `mailto:${SITE.EMAIL}`,
+  },  
+  
 ];
