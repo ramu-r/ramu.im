@@ -51,6 +51,20 @@ const dateLong = project.data.date.toLocaleDateString("en-US", {
     <div class="zen-article">
       <Content />
     </div>
+
+    {project.data.notes && project.data.notes.length > 0 && (
+      <section class="project-notes">
+        <h2 class="zen-h2">notes</h2>
+        {project.data.notes.map((note) => (
+          <a href={note.url} class="project-note">
+            <span class="entry-title project-note-title">{note.title}</span>
+            {note.description && (
+              <span class="entry-desc project-note-desc">{note.description}</span>
+            )}
+          </a>
+        ))}
+      </section>
+    )}
   </article>
 </ZenLayout>
 
@@ -82,4 +96,39 @@ const dateLong = project.data.date.toLocaleDateString("en-US", {
   }
 
   .project-links .sep { color: var(--c-meta); }
+
+  .project-notes {
+    margin-top: 3rem;
+  }
+
+  .project-note {
+    display: block;
+    text-decoration: none;
+  }
+
+  .project-note + .project-note {
+    margin-top: 1.4rem;
+  }
+
+  .project-note .project-note-title {
+    display: block;
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--c-fg);
+    text-decoration-line: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--c-link);
+  }
+
+  .project-note:hover .project-note-title {
+    color: var(--c-link);
+    text-decoration-color: var(--c-link);
+  }
+
+  .project-note .project-note-desc {
+    display: block;
+    margin-top: 0.25rem;
+  }
 </style>

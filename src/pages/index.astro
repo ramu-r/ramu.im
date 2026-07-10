@@ -9,21 +9,28 @@ const all = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const projects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+const NUM_NOTES_ON_HOMEPAGE = 5;
+const NUM_PROJECT_NOTES_ON_HOMEPAGE = 3;
 
-const books = (await getCollection("books"))
+const allProjects = (await getCollection("projects"))
+  .filter((project) => !project.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const projects = allProjects.slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+const hasMoreProjects = allProjects.length > SITE.NUM_PROJECTS_ON_HOMEPAGE;
+
+const allBooks = (await getCollection("books"))
   .filter((book) => !book.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_BOOKS_ON_HOMEPAGE);
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const books = allBooks.slice(0, SITE.NUM_BOOKS_ON_HOMEPAGE);
+const hasMoreBooks = allBooks.length > SITE.NUM_BOOKS_ON_HOMEPAGE;
 
 const allWriting = all.filter((p) => p.data.type !== "micro");
 const writing = allWriting.slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 const hasMoreWriting = allWriting.length > SITE.NUM_POSTS_ON_HOMEPAGE;
 
-const notes = all.filter((p) => p.data.type === "micro").slice(0, 5);
+const allNotes = all.filter((p) => p.data.type === "micro");
+const notes = allNotes.slice(0, NUM_NOTES_ON_HOMEPAGE);
+const hasMoreNotes = allNotes.length > NUM_NOTES_ON_HOMEPAGE;
 
 const monthYear = (d: Date) =>
   d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
@@ -56,7 +63,7 @@ const fullDate = (d: Date) =>
       ))}
       {hasMoreWriting && (
         <div class="all-row">
-          <a href="/blog" class="all-link">all writing →</a>
+          <a href="/blog" class="all-link">see more <span class="arrow">→</span></a>
         </div>
       )}
     </section>
@@ -84,6 +91,11 @@ const fullDate = (d: Date) =>
           <div class="note-meta">{fullDate(note.data.date)}</div>
         </div>
       ))}
+      {hasMoreNotes && (
+        <div class="all-row">
+          <a href="/notes" class="all-link">see more <span class="arrow">→</span></a>
+        </div>
+      )}
     </section>
   </div>
 
@@ -104,6 +116,11 @@ const fullDate = (d: Date) =>
           </div>
         </div>
       ))}
+      {hasMoreBooks && (
+        <div class="all-row">
+          <a href="/books" class="all-link">see more <span class="arrow">→</span></a>
+        </div>
+      )}
     </section>
   )}
 
@@ -127,7 +144,7 @@ const fullDate = (d: Date) =>
             </div>
           </div>
           <div class="project-notes">
-            {project.data.notes?.map((note) => (
+            {project.data.notes?.slice(0, NUM_PROJECT_NOTES_ON_HOMEPAGE).map((note) => (
               <a href={note.url} class="project-note">
                 <span class="entry-title project-note-title">{note.title}</span>
                 {note.description && (
@@ -135,9 +152,19 @@ const fullDate = (d: Date) =>
                 )}
               </a>
             ))}
+            {(project.data.notes?.length ?? 0) > NUM_PROJECT_NOTES_ON_HOMEPAGE && (
+              <div class="all-row">
+                <a href={`/projects/${project.id}`} class="all-link">see more <span class="arrow">→</span></a>
+              </div>
+            )}
           </div>
         </div>
       ))}
+      {hasMoreProjects && (
+        <div class="all-row">
+          <a href="/projects" class="all-link">see more <span class="arrow">→</span></a>
+        </div>
+      )}
     </section>
   )}
 </ZenLayout>
@@ -327,6 +354,7 @@ const fullDate = (d: Date) =>
 
   .all-row {
     margin-top: 1.6rem;
+    text-align: right;
   }
 
   .all-link {
@@ -336,6 +364,8 @@ const fullDate = (d: Date) =>
   }
 
   .all-link:hover { color: var(--c-fg); opacity: 1; }
+
+  .all-link .arrow { color: var(--c-link); }
 
   .note-link {
     text-decoration: none;
