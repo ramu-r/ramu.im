@@ -26,7 +26,24 @@ const projects = defineCollection({
     draft: z.boolean().optional(),
     demoURL: z.string().optional(),
     repoURL: z.string().optional(),
+    notes: z.array(z.object({
+      title: z.string(),
+      description: z.string().optional(),
+      url: z.string(),
+    })).optional(),
   }),
 });
 
-export const collections = { blog, projects };
+const books = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: "./src/content/books" }),
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    author: z.string(),
+    cover: image(),
+    excerpt: z.string(),
+    date: z.coerce.date(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+export const collections = { blog, projects, books };
