@@ -236,6 +236,9 @@ const fullDate = (d: Date) =>
 
   .project-title {
     margin-top: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   .project-links {
@@ -264,10 +267,19 @@ const fullDate = (d: Date) =>
   .project-note .project-note-title {
     display: block;
     margin: 0;
+    font-size: 0.98rem;
+    font-weight: 600;
     color: var(--c-fg);
+    text-decoration-line: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--c-link);
   }
 
-  .project-note:hover .project-note-title { color: var(--c-link); }
+  .project-note:hover .project-note-title {
+    color: var(--c-link);
+    text-decoration-color: var(--c-link);
+  }
 
   .project-note .project-note-desc {
     display: block;
@@ -333,10 +345,15 @@ const fullDate = (d: Date) =>
   .note-link-card :global(.link-title) {
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--c-link);
+    color: var(--c-fg);
     text-decoration-line: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
+    text-decoration-color: var(--c-link);
+  }
+
+  .note-link-card:hover :global(.link-title) {
+    color: var(--c-link);
   }
 
   .note-link-card :global(.link-domain) {

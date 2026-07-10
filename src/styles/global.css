@@ -82,14 +82,17 @@
 /* ───────────────────────── Base links ───────────────────────── */
 a:link,
 a:visited {
-  color: var(--c-link);
+  color: var(--c-fg);
+  font-weight: 500;
   text-decoration-line: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
+  text-decoration-color: var(--c-link);
 }
 
 a:hover {
-  opacity: 0.75;
+  color: var(--c-link);
+  text-decoration-color: var(--c-link);
 }
 
 /* ───────────────────────── Page shell ───────────────────────── */
@@ -179,10 +182,17 @@ a:hover {
 
 .note-text a:link,
 .note-text a:visited {
-  color: var(--c-link);
+  color: var(--c-fg);
+  font-weight: 500;
   text-decoration-line: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
+  text-decoration-color: var(--c-link);
+}
+
+.note-text a:hover {
+  color: var(--c-link);
+  text-decoration-color: var(--c-link);
 }
 
 .note-quote {
@@ -256,7 +266,14 @@ a:hover {
 
 .zen-article a:link,
 .zen-article a:visited {
+  color: var(--c-fg);
+  font-weight: 500;
+  text-decoration-color: var(--c-link);
+}
+
+.zen-article a:hover {
   color: var(--c-link);
+  text-decoration-color: var(--c-link);
 }
 
 .zen-article strong {
