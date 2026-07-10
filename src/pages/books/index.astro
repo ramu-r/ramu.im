@@ -1,0 +1,84 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import ZenLayout from "@layouts/ZenLayout.astro";
+import SiteHeader from "@components/SiteHeader.astro";
+
+const books = (await getCollection("books"))
+  .filter((book) => !book.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<ZenLayout title="Reading" description="Books I've read and notes on them.">
+  <SiteHeader active="books" />
+
+  <h1 class="page-title">Reading</h1>
+
+  <section>
+    {books.map((book) => (
+      <div class="book-row">
+        <a href={`/books/${book.id}`} class="book-cover-link">
+          <Image src={book.data.cover} alt={`Cover of ${book.data.title}`} class="book-cover" width={200} />
+        </a>
+        <div class="book-body">
+          <h3 class="entry-title book-title">
+            <a href={`/books/${book.id}`}>{book.data.title}</a>
+          </h3>
+          <p class="book-author">{book.data.author}</p>
+          <p class="entry-desc book-excerpt">{book.data.excerpt}</p>
+        </div>
+      </div>
+    ))}
+  </section>
+</ZenLayout>
+
+<style>
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 2.4rem;
+  }
+
+  .book-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.6rem;
+  }
+
+  .book-row + .book-row {
+    margin-top: 2rem;
+  }
+
+  .book-cover-link {
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  .book-cover {
+    width: 100px;
+    height: auto;
+    border-radius: 3px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.16);
+  }
+
+  .book-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .book-title {
+    margin: 0;
+  }
+
+  .book-author {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    color: var(--c-meta);
+  }
+
+  .book-excerpt {
+    margin: 0.7rem 0 0;
+    max-width: 60ch;
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import { getCollection } from "astro:content";
+import ZenLayout from "@layouts/ZenLayout.astro";
+import SiteHeader from "@components/SiteHeader.astro";
+
+const notes = (await getCollection("blog"))
+  .filter((post) => !post.data.draft && post.data.type === "micro")
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const fullDate = (d: Date) =>
+  d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+---
+
+<ZenLayout title="Notes" description="Short notes and links.">
+  <SiteHeader active="notes" />
+
+  <h1 class="page-title">Notes</h1>
+
+  <section>
+    {notes.length === 0 && <p class="entry-desc">No notes yet.</p>}
+    {notes.map((note) => (
+      <div class="note">
+        {note.data.link ? (
+          <>
+            <p class="note-text">{note.data.description}</p>
+            <a href={note.data.link.url} class="note-link-card" target="_blank" rel="noopener">
+              <span class="link-title">{note.data.link.title}</span>
+              <span class="link-domain">{new URL(note.data.link.url).hostname.replace(/^www\./, "")}</span>
+            </a>
+          </>
+        ) : (
+          <a href={`/blog/${note.id}`} class="note-link">
+            <p class="note-text">{note.data.description}</p>
+          </a>
+        )}
+        <div class="note-meta">{fullDate(note.data.date)}</div>
+      </div>
+    ))}
+  </section>
+</ZenLayout>
+
+<style>
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 2.4rem;
+  }
+
+  section :global(.note:first-of-type) {
+    padding-top: 0;
+  }
+
+  .note-link {
+    text-decoration: none;
+    display: block;
+  }
+
+  .note-link:hover { opacity: 0.7; }
+
+  .note-link .note-text {
+    color: var(--c-fg);
+  }
+
+  .note-link-card {
+    display: block;
+    text-decoration: none;
+    margin-top: 6px;
+  }
+
+  .note-link-card:hover { opacity: 0.65; }
+
+  .note-link-card :global(.link-title) {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--c-fg);
+    text-decoration-line: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--c-link);
+  }
+
+  .note-link-card:hover :global(.link-title) {
+    color: var(--c-link);
+  }
+
+  .note-link-card :global(.link-domain) {
+    font-size: 0.85rem;
+    color: var(--c-meta);
+  }
+
+  .note-link-card :global(.link-domain)::before {
+    content: " — ";
+  }
+</style>
