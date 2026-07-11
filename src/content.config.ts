@@ -26,11 +26,7 @@ const projects = defineCollection({
     draft: z.boolean().optional(),
     demoURL: z.string().optional(),
     repoURL: z.string().optional(),
-    notes: z.array(z.object({
-      title: z.string(),
-      description: z.string().optional(),
-      url: z.string(),
-    })).optional(),
+    tags: z.array(z.string()).optional(),
   }),
 });
 

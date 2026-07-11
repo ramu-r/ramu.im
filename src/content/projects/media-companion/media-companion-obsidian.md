@@ -5,7 +5,7 @@ date: 2026-07-04
 tags: ["tools", "obsidian", "files"]
 ---
 
-This is a follow-up to [Building a file metadata companion](/blog/media-companion), where I worked out why I wanted companion files for arbitrary files. This post is about how I actually built it.
+This is a follow-up to [Building a file metadata companion](/projects/media-companion/media-companion), where I worked out why I wanted companion files for arbitrary files. This post is about how I actually built it.
 
 **The best place to do it manually was in Obsidian.** Obsidian lets me save different kinds of files and maintain a separate note for each one that links to the file and stores the metadata. A vehicle insurance PDF and a note called "vehicle-insurance.md" with the expiry date and a link to the file. This works well for documents because they are usually one of a kind and their name describes them well.
 

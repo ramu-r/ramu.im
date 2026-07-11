@@ -12,11 +12,22 @@ const all = (await getCollection("blog"))
 const NUM_NOTES_ON_HOMEPAGE = 5;
 const NUM_PROJECT_NOTES_ON_HOMEPAGE = 3;
 
-const allProjects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft)
+const allProjectEntries = (await getCollection("projects"))
+  .filter((entry) => !entry.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const allProjects = allProjectEntries.filter((e) => !e.id.includes("/"));
 const projects = allProjects.slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 const hasMoreProjects = allProjects.length > SITE.NUM_PROJECTS_ON_HOMEPAGE;
+
+const projectNotesMap = Object.fromEntries(
+  projects.map((project) => [
+    project.id,
+    allProjectEntries
+      .filter((e) => e.id.startsWith(project.id + "/"))
+      .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf()),
+  ])
+);
 
 const allBooks = (await getCollection("books"))
   .filter((book) => !book.data.draft)
@@ -143,15 +154,12 @@ const fullDate = (d: Date) =>
             </div>
           </div>
           <div class="project-notes">
-            {project.data.notes?.slice(0, NUM_PROJECT_NOTES_ON_HOMEPAGE).map((note) => (
-              <a href={note.url} class="project-note">
-                <span class="entry-title project-note-title">{note.title}</span>
-                {note.description && (
-                  <span class="entry-desc project-note-desc">{note.description}</span>
-                )}
+            {projectNotesMap[project.id]?.slice(0, NUM_PROJECT_NOTES_ON_HOMEPAGE).map((note) => (
+              <a href={`/projects/${note.id}`} class="project-note">
+                <span class="entry-title project-note-title">{note.data.title}</span>
               </a>
             ))}
-            {(project.data.notes?.length ?? 0) > NUM_PROJECT_NOTES_ON_HOMEPAGE && (
+            {(projectNotesMap[project.id]?.length ?? 0) > NUM_PROJECT_NOTES_ON_HOMEPAGE && (
               <div class="all-row">
                 <a href={`/projects/${project.id}`} class="all-link">see more <span class="arrow">→</span></a>
               </div>

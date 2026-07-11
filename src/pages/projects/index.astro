@@ -5,7 +5,7 @@ import SiteHeader from "@components/SiteHeader.astro";
 import { PROJECTS } from "@consts";
 
 const projects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft)
+  .filter((project) => !project.data.draft && !project.id.includes("/"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
@@ -13,7 +13,7 @@ const projects = (await getCollection("projects"))
   <SiteHeader active="projects" />
 
   <h1 class="page-title">Process Notes</h1>
-  <p class="page-desc">This is a space for my daily programming/hacking notes. It's organized into projects to avoid a long unconnected list.</p>
+  <p class="page-desc">This is a space for my daily programming/hacking notes. It's organized into projects to avoid a long list of disconnected notes.</p>
 
   <section>
     {projects.map((project) => (

@@ -5,45 +5,64 @@ import SiteHeader from "@components/SiteHeader.astro";
 import { readingTime } from "@lib/utils";
 
 export async function getStaticPaths() {
-  const projects = (await getCollection("projects"))
-    .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-  return projects.map((project) => ({
-    params: { id: project.id },
-    props: project,
+  const allEntries = (await getCollection("projects"))
+    .filter((entry) => !entry.data.draft);
+  return allEntries.map((entry) => ({
+    params: { id: entry.id },
+    props: entry,
   }));
 }
+
 type Props = CollectionEntry<"projects">;
 
-const project = Astro.props;
-const { Content } = await render(project);
+const entry = Astro.props;
+const { Content } = await render(entry);
+const isNote = entry.id.includes("/");
+const projectSlug = isNote ? entry.id.split("/")[0] : entry.id;
 
-const dateLong = project.data.date.toLocaleDateString("en-US", {
+const allEntries = await getCollection("projects");
+const notes = isNote
+  ? []
+  : allEntries
+      .filter((e) => !e.data.draft && e.id.startsWith(projectSlug + "/"))
+      .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+
+const dateLong = entry.data.date.toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",
   year: "numeric",
 });
+
+const parentProject = isNote
+  ? allEntries.find((e) => e.id === projectSlug)
+  : null;
 ---
 
-<ZenLayout title={project.data.title} description={project.data.description}>
+<ZenLayout title={entry.data.title} description={entry.data.description}>
   <SiteHeader active="projects" />
 
   <article>
+    {isNote && parentProject && (
+      <div class="back-link">
+        <a href={`/projects/${projectSlug}`}>← {parentProject.data.title}</a>
+      </div>
+    )}
+
     <div class="post-meta">
       <span>{dateLong}</span>
-      {project.body && <span>{readingTime(project.body)}</span>}
+      {entry.body && <span>{readingTime(entry.body)}</span>}
     </div>
 
-    <h1 class="post-title">{project.data.title}</h1>
+    <h1 class="post-title">{entry.data.title}</h1>
 
-    {(project.data.demoURL || project.data.repoURL) && (
+    {!isNote && (entry.data.demoURL || entry.data.repoURL) && (
       <nav class="project-links">
-        {project.data.demoURL && (
-          <a href={project.data.demoURL} target="_blank" rel="noopener">demo</a>
+        {entry.data.demoURL && (
+          <a href={entry.data.demoURL} target="_blank" rel="noopener">demo</a>
         )}
-        {project.data.demoURL && project.data.repoURL && <span class="sep">/</span>}
-        {project.data.repoURL && (
-          <a href={project.data.repoURL} target="_blank" rel="noopener">repo</a>
+        {entry.data.demoURL && entry.data.repoURL && <span class="sep">/</span>}
+        {entry.data.repoURL && (
+          <a href={entry.data.repoURL} target="_blank" rel="noopener">repo</a>
         )}
       </nav>
     )}
@@ -52,14 +71,14 @@ const dateLong = project.data.date.toLocaleDateString("en-US", {
       <Content />
     </div>
 
-    {project.data.notes && project.data.notes.length > 0 && (
+    {!isNote && notes.length > 0 && (
       <section class="project-notes">
         <h2 class="zen-h2">notes</h2>
-        {project.data.notes.map((note) => (
-          <a href={note.url} class="project-note">
-            <span class="entry-title project-note-title">{note.title}</span>
-            {note.description && (
-              <span class="entry-desc project-note-desc">{note.description}</span>
+        {notes.map((note) => (
+          <a href={`/projects/${note.id}`} class="project-note">
+            <span class="entry-title project-note-title">{note.data.title}</span>
+            {note.data.description && (
+              <span class="entry-desc project-note-desc">{note.data.description}</span>
             )}
           </a>
         ))}
@@ -69,6 +88,22 @@ const dateLong = project.data.date.toLocaleDateString("en-US", {
 </ZenLayout>
 
 <style>
+  .back-link {
+    font-size: 0.85rem;
+    margin-bottom: 1.6rem;
+    color: var(--c-meta);
+  }
+
+  .back-link a {
+    color: var(--c-meta);
+    text-decoration: none;
+  }
+
+  .back-link a:hover {
+    color: var(--c-fg);
+    opacity: 1;
+  }
+
   .post-meta {
     display: flex;
     flex-wrap: wrap;
