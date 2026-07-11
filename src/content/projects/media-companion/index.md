@@ -4,13 +4,6 @@ description: "An Obsidian plugin fork that stores context and connections for ar
 date: "07/11/2026"
 draft: false
 repoURL: "https://github.com/ramu-r/media-companion"
-notes:
-  - title: "Introduction to the idea"
-    description: "Filesystems can't express how files relate to each other. An introduction to the companion-file approach that fixes it."
-    url: "/blog/media-companion"
-  - title: "How I built the plugin"
-    description: "Turning the idea into a working setup — a fork of Obsidian Media Companion with colocated sidecars and implicit reverse links."
-    url: "/blog/media-companion-obsidian"
 ---
 
 Media Companion is a fork of the Obsidian Media Companion plugin that stores metadata and relationships in sidecar files living next to the files they describe.
