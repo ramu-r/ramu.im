@@ -138,32 +138,34 @@ const fullDate = (d: Date) =>
     <section class="projects">
       <h2 class="zen-h2"><a href="/projects">process notes</a></h2>
       {projects.map((project) => (
-        <div class="project-row">
-          <div class="project-info">
-            <h3 class="entry-title project-title">
-              <a href={`/projects/${project.id}`}>{project.data.title}</a>
-            </h3>
-            <p class="entry-desc">{project.data.description}</p>
-            <div class="project-links">
-              {project.data.repoURL && (
-                <a href={project.data.repoURL} target="_blank" rel="noopener">GitHub</a>
-              )}
-              {project.data.demoURL && (
-                <a href={project.data.demoURL} target="_blank" rel="noopener">Demo</a>
+        <div class="project-block">
+          <h3 class="entry-title project-title">
+            <a href={`/projects/${project.id}`}>{project.data.title}</a>
+          </h3>
+          <div class="project-row">
+            <div class="project-info">
+              <p class="entry-desc">{project.data.description}</p>
+              <div class="project-links">
+                {project.data.repoURL && (
+                  <a href={project.data.repoURL} target="_blank" rel="noopener">GitHub</a>
+                )}
+                {project.data.demoURL && (
+                  <a href={project.data.demoURL} target="_blank" rel="noopener">Demo</a>
+                )}
+              </div>
+            </div>
+            <div class="project-notes">
+              {projectNotesMap[project.id]?.slice(0, NUM_PROJECT_NOTES_ON_HOMEPAGE).map((note) => (
+                <a href={`/projects/${note.id}`} class="project-note">
+                  <span class="project-note-title"><span class="note-arrow">✦</span><span class="note-text">{note.data.title}</span></span>
+                </a>
+              ))}
+              {(projectNotesMap[project.id]?.length ?? 0) > NUM_PROJECT_NOTES_ON_HOMEPAGE && (
+                <div class="all-row">
+                  <a href={`/projects/${project.id}`} class="all-link">see more <span class="arrow">→</span></a>
+                </div>
               )}
             </div>
-          </div>
-          <div class="project-notes">
-            {projectNotesMap[project.id]?.slice(0, NUM_PROJECT_NOTES_ON_HOMEPAGE).map((note) => (
-              <a href={`/projects/${note.id}`} class="project-note">
-                <span class="entry-title project-note-title">{note.data.title}</span>
-              </a>
-            ))}
-            {(projectNotesMap[project.id]?.length ?? 0) > NUM_PROJECT_NOTES_ON_HOMEPAGE && (
-              <div class="all-row">
-                <a href={`/projects/${project.id}`} class="all-link">see more <span class="arrow">→</span></a>
-              </div>
-            )}
           </div>
         </div>
       ))}
@@ -254,15 +256,15 @@ const fullDate = (d: Date) =>
     margin-top: 5rem;
   }
 
-  .project-row {
-    display: flex;
-    gap: 2em;
-  }
-
-  .project-row + .project-row {
+  .project-block + .project-block {
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid var(--c-divider);
+  }
+
+  .project-row {
+    display: flex;
+    gap: 2em;
   }
 
   .project-info { flex: 3 1 0; min-width: 0; }
@@ -270,6 +272,7 @@ const fullDate = (d: Date) =>
 
   .project-title {
     margin-top: 0;
+    margin-bottom: 0.4rem;
     font-size: 1.3rem;
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -295,15 +298,26 @@ const fullDate = (d: Date) =>
   }
 
   .project-note + .project-note {
-    margin-top: 1.4rem;
+    margin-top: 0.6rem;
   }
 
   .project-note .project-note-title {
-    display: block;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
     margin: 0;
-    font-size: 0.98rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 500;
     color: var(--c-fg);
+  }
+
+  .note-arrow {
+    flex-shrink: 0;
+    color: var(--c-link);
+    text-decoration: none;
+  }
+
+  .project-note .project-note-title .note-text {
     text-decoration-line: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
@@ -312,7 +326,6 @@ const fullDate = (d: Date) =>
 
   .project-note:hover .project-note-title {
     color: var(--c-link);
-    text-decoration-color: var(--c-link);
   }
 
   .project-note .project-note-desc {
@@ -334,7 +347,7 @@ const fullDate = (d: Date) =>
       flex-direction: column;
       gap: 2.6rem;
     }
-    .project-row {
+    .project-block .project-row {
       flex-direction: column;
       gap: 1.6rem;
     }
