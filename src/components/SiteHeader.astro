@@ -2,13 +2,13 @@
 import { SITE } from "@consts";
 
 interface Props {
-  active?: "blog" | "notes" | "books" | "projects" | "tags";
+  active?: "blog" | "feed" | "books" | "projects" | "tags";
 }
 
 const { active } = Astro.props;
 const links = [
   { href: "/blog", label: "writing", key: "blog" },
-  { href: "/notes", label: "notes", key: "notes" },
+  { href: "/feed", label: "feed", key: "feed" },
   { href: "/books", label: "reading", key: "books" },
   { href: "/projects", label: "coding", key: "projects" },
 ];

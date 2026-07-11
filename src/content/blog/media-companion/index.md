@@ -1,7 +1,7 @@
 ---
 title: "Building a file metadata companion"
 description: "Why I built a companion-file system for storing context and connections between arbitrary files, and the Obsidian plugin fork that makes it work."
-date: 2026-07-11
+date: 2026-06-27
 tags: ["tools", "obsidian", "files"]
 ---
 

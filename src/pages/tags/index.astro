@@ -13,6 +13,7 @@ const count = (tag: string) =>
   <SiteHeader active="tags" />
 
   <h1 class="page-title">Tags</h1>
+  <p class="page-desc">Browse posts by topic.</p>
 
   <div class="tag-cloud">
     {tags.map((tag) => (
@@ -28,6 +29,14 @@ const count = (tag: string) =>
     font-size: 2.2rem;
     font-weight: 700;
     letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .page-desc {
+    font-size: 1.5rem;
+    color: var(--c-meta);
+    line-height: 1.5;
+    max-width: 42ch;
     margin: 0 0 2.4rem;
   }
 

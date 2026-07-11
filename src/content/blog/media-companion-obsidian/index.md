@@ -1,7 +1,7 @@
 ---
 title: "A sidecar-file plugin for Obsidian"
 description: "How I turned the companion-file idea into a working setup: a fork of Obsidian Media Companion with colocated sidecars, automatic previews, and implicit reverse links."
-date: 2026-07-11
+date: 2026-07-04
 tags: ["tools", "obsidian", "files"]
 ---
 

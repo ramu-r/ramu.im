@@ -2,6 +2,9 @@
 description: "It wasn't that React did less. It won because there were fewer pieces to think about."
 date: "2026-06-25"
 type: "micro"
+link:
+  url: "https://nx.dev/blog/meta-harnesses-agents-and-lessons-from-the-framework-wars"
+  title: "Meta harnesses, agents, and lessons from the framework wars"
 ---
 
 [This nx.dev piece](https://nx.dev/blog/meta-harnesses-agents-and-lessons-from-the-framework-wars) credits React's win to doing less than its rivals. I read it the other way. React won because there were fewer pieces to hold in your head, not because the framework was smaller.

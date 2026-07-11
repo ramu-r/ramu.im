@@ -13,6 +13,7 @@ const books = (await getCollection("books"))
   <SiteHeader active="books" />
 
   <h1 class="page-title">Reading</h1>
+  <p class="page-desc">Books I've read, with notes and takeaways.</p>
 
   <section>
     {books.map((book) => (
@@ -37,6 +38,14 @@ const books = (await getCollection("books"))
     font-size: 2.2rem;
     font-weight: 700;
     letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .page-desc {
+    font-size: 1.5rem;
+    color: var(--c-meta);
+    line-height: 1.5;
+    max-width: 42ch;
     margin: 0 0 2.4rem;
   }
 

@@ -11,10 +11,11 @@ const fullDate = (d: Date) =>
   d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 ---
 
-<ZenLayout title="Notes" description="Short notes and links.">
-  <SiteHeader active="notes" />
+<ZenLayout title="Feed" description="Short notes and links.">
+  <SiteHeader active="feed" />
 
-  <h1 class="page-title">Notes</h1>
+  <h1 class="page-title">Feed</h1>
+  <p class="page-desc">Short notes, links, and things worth remembering.</p>
 
   <section>
     {notes.length === 0 && <p class="entry-desc">No notes yet.</p>}
@@ -44,6 +45,14 @@ const fullDate = (d: Date) =>
     font-size: 2.2rem;
     font-weight: 700;
     letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .page-desc {
+    font-size: 1.5rem;
+    color: var(--c-meta);
+    line-height: 1.5;
+    max-width: 42ch;
     margin: 0 0 2.4rem;
   }
 
