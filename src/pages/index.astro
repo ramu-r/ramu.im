@@ -60,7 +60,7 @@ const fullDate = (d: Date) =>
 
   <div class="cols">
     <section class="writing">
-      <h2 class="zen-h2"><a href="/blog">writing</a></h2>
+      <h2 class="zen-h2"><a href="/blog">posts</a></h2>
       {writing.map((post) => (
         <>
           <h3 class="entry-title">
@@ -136,12 +136,17 @@ const fullDate = (d: Date) =>
 
   {projects.length > 0 && (
     <section class="projects">
-      <h2 class="zen-h2"><a href="/projects">process notes</a></h2>
+      <h2 class="zen-h2"><a href="/projects">projects</a></h2>
       {projects.map((project) => (
         <div class="project-block">
-          <h3 class="entry-title project-title">
-            <a href={`/projects/${project.id}`}>{project.data.title}</a>
-          </h3>
+          <div class="project-header">
+            <h3 class="entry-title project-title">
+              <a href={`/projects/${project.id}`}>{project.data.title}</a>
+            </h3>
+            {(projectNotesMap[project.id]?.length ?? 0) > 0 && (
+              <p class="project-notes-label">build log</p>
+            )}
+          </div>
           <div class="project-row">
             <div class="project-info">
               <p class="entry-desc">{project.data.description}</p>
@@ -292,6 +297,28 @@ const fullDate = (d: Date) =>
 
   .project-links a:hover { color: var(--c-fg); }
 
+  .project-header {
+    display: flex;
+    gap: 2em;
+    align-items: baseline;
+    margin-bottom: 0.2rem;
+  }
+
+  .project-header .project-title {
+    flex: 3 1 0;
+    min-width: 0;
+  }
+
+  .project-notes-label {
+    flex: 2 1 0;
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-meta);
+  }
+
   .project-note {
     display: block;
     text-decoration: none;
@@ -360,6 +387,15 @@ const fullDate = (d: Date) =>
 
   .notes :global(.note:first-of-type) {
     padding-top: 0;
+  }
+
+  .notes :global(.note-text) {
+    font-size: 0.96rem;
+  }
+
+  .writing :global(.entry-desc),
+  .projects :global(.entry-desc) {
+    font-size: 0.96rem;
   }
 
   .zen-h2 :global(a) {

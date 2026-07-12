@@ -159,7 +159,7 @@ a:hover {
 
 .entry-desc {
   margin: 0;
-  font-size: 0.96rem;
+  font-size: 1.05rem;
   color: var(--c-desc);
   line-height: 1.55;
 }
@@ -174,7 +174,7 @@ a:hover {
 }
 
 .note-text {
-  font-size: 0.96rem;
+  font-size: 1.08rem;
   color: var(--c-fg);
   line-height: 1.6;
   margin: 0;

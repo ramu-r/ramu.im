@@ -75,12 +75,14 @@ const parentProject = isNote
       <section class="project-notes">
         <h2 class="zen-h2">notes</h2>
         {notes.map((note) => (
-          <a href={`/projects/${note.id}`} class="project-note">
-            <span class="entry-title project-note-title">{note.data.title}</span>
+          <>
+            <h3 class="entry-title">
+              <a href={`/projects/${note.id}`}>{note.data.title}</a>
+            </h3>
             {note.data.description && (
-              <span class="entry-desc project-note-desc">{note.data.description}</span>
+              <p class="entry-desc">{note.data.description}</p>
             )}
-          </a>
+          </>
         ))}
       </section>
     )}
@@ -136,34 +138,7 @@ const parentProject = isNote
     margin-top: 3rem;
   }
 
-  .project-note {
-    display: block;
-    text-decoration: none;
-  }
-
-  .project-note + .project-note {
-    margin-top: 1.4rem;
-  }
-
-  .project-note .project-note-title {
-    display: block;
-    margin: 0;
-    font-size: 0.98rem;
-    font-weight: 600;
-    color: var(--c-fg);
-    text-decoration-line: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-    text-decoration-color: var(--c-link);
-  }
-
-  .project-note:hover .project-note-title {
-    color: var(--c-link);
-    text-decoration-color: var(--c-link);
-  }
-
-  .project-note .project-note-desc {
-    display: block;
-    margin-top: 0.25rem;
+  .project-notes :global(.entry-title:first-of-type) {
+    margin-top: 0;
   }
 </style>
