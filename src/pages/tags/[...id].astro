@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import ZenLayout from "@layouts/ZenLayout.astro";
 import SiteHeader from "@components/SiteHeader.astro";
+import PageHeader from "@components/PageHeader.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -28,7 +29,7 @@ const monthDay = (d: Date) =>
 <ZenLayout title={`Tag: ${id}`} description={`Posts with the tag: ${id}`}>
   <SiteHeader active="tags" />
 
-  <h1 class="page-title">#{id}</h1>
+  <PageHeader title={`#${id}`} />
 
   <section>
     {sortedPosts.map((post) => (
@@ -48,13 +49,6 @@ const monthDay = (d: Date) =>
 </ZenLayout>
 
 <style>
-  .page-title {
-    font-size: 2.2rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin: 0 0 2.4rem;
-  }
-
   section :global(.entry-title:first-of-type) {
     margin-top: 0;
   }

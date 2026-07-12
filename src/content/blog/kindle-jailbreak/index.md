@@ -1,7 +1,7 @@
 ---
-title: Jailbreaking my Kindle
-description: Freeing a basic Kindle with WinterBreak.
-date: 2026-05-18
+title: "Jailbreaking my Kindle"
+description: "Freeing a basic Kindle with WinterBreak."
+date: "2026-06-14"
 ---
 
 I jailbroke my Kindle over the weekend. It's been on my mind for a while. I'd been putting it off because I was afraid I'd brick it. I have an old basic Kindle, the 10th gen one.

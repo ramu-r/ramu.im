@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import ZenLayout from "@layouts/ZenLayout.astro";
 import SiteHeader from "@components/SiteHeader.astro";
+import PageHeader from "@components/PageHeader.astro";
 import { readingTime } from "@lib/utils";
 
 export async function getStaticPaths() {
@@ -42,30 +43,36 @@ const parentProject = isNote
   <SiteHeader active="projects" />
 
   <article>
-    {isNote && parentProject && (
-      <div class="back-link">
-        <a href={`/projects/${projectSlug}`}>← {parentProject.data.title}</a>
-      </div>
-    )}
-
-    <div class="post-meta">
-      <span>{dateLong}</span>
-      {entry.body && <span>{readingTime(entry.body)}</span>}
-    </div>
-
-    <h1 class="post-title">{entry.data.title}</h1>
-
-    {!isNote && (entry.data.demoURL || entry.data.repoURL) && (
-      <nav class="project-links">
-        {entry.data.demoURL && (
-          <a href={entry.data.demoURL} target="_blank" rel="noopener">demo</a>
-        )}
-        {entry.data.demoURL && entry.data.repoURL && <span class="sep">/</span>}
-        {entry.data.repoURL && (
-          <a href={entry.data.repoURL} target="_blank" rel="noopener">repo</a>
-        )}
-      </nav>
-    )}
+    <PageHeader
+      date={dateLong}
+      title={entry.data.title}
+      readingTime={entry.body ? readingTime(entry.body) : undefined}
+      backLink={isNote && parentProject ? { href: `/projects/${projectSlug}`, label: parentProject.data.title } : undefined}
+    >
+      {!isNote && (entry.data.demoURL || entry.data.repoURL) && (
+        <nav class="project-links">
+          {entry.data.demoURL && (
+            <a href={entry.data.demoURL} target="_blank" rel="noopener" class="project-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              demo
+            </a>
+          )}
+          {entry.data.repoURL && (
+            <a href={entry.data.repoURL} target="_blank" rel="noopener" class="project-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
+              source
+            </a>
+          )}
+        </nav>
+      )}
+    </PageHeader>
 
     <div class="zen-article">
       <Content />
@@ -90,49 +97,31 @@ const parentProject = isNote
 </ZenLayout>
 
 <style>
-  .back-link {
-    font-size: 0.85rem;
-    margin-bottom: 1.6rem;
-    color: var(--c-meta);
+  .project-links {
+    display: flex;
+    gap: 8px;
+    align-items: center;
   }
 
-  .back-link a {
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
     color: var(--c-meta);
     text-decoration: none;
   }
 
-  .back-link a:hover {
-    color: var(--c-fg);
+  .project-link:hover {
+    color: var(--c-link);
     opacity: 1;
   }
 
-  .post-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.82rem;
-    color: var(--c-meta);
-    margin-bottom: 1.2rem;
+  .project-link svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
   }
-
-  .post-title {
-    font-size: 2.4rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin: 0 0 0.8rem;
-  }
-
-  .project-links {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 2rem;
-    font-size: 0.95rem;
-  }
-
-  .project-links .sep { color: var(--c-meta); }
 
   .project-notes {
     margin-top: 3rem;

@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import ZenLayout from "@layouts/ZenLayout.astro";
 import SiteHeader from "@components/SiteHeader.astro";
+import PageHeader from "@components/PageHeader.astro";
 import { PROJECTS } from "@consts";
 
 const projects = (await getCollection("projects"))
@@ -12,8 +13,7 @@ const projects = (await getCollection("projects"))
 <ZenLayout title={PROJECTS.TITLE} description={PROJECTS.DESCRIPTION}>
   <SiteHeader active="projects" />
 
-  <h1 class="page-title">Projects</h1>
-  <p class="page-desc">This is a space for my daily programming/hacking notes. It's organized into projects to avoid a long list of disconnected notes.</p>
+  <PageHeader title="Projects" description="This is a space for my daily programming/hacking notes. It's organized into projects to avoid a long list of disconnected notes." />
 
   <section>
     {projects.map((project) => (
@@ -28,21 +28,6 @@ const projects = (await getCollection("projects"))
 </ZenLayout>
 
 <style>
-  .page-title {
-    font-size: 2.2rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin: 0;
-  }
-
-  .page-desc {
-    font-size: 1.5rem;
-    color: var(--c-meta);
-    line-height: 1.5;
-    max-width: 42ch;
-    margin: 0 0 2.4rem;
-  }
-
   section :global(.entry-title:first-of-type) {
     margin-top: 0;
   }

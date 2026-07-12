@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import ZenLayout from "@layouts/ZenLayout.astro";
 import SiteHeader from "@components/SiteHeader.astro";
+import PageHeader from "@components/PageHeader.astro";
 
 const books = (await getCollection("books"))
   .filter((book) => !book.data.draft)
@@ -12,8 +13,7 @@ const books = (await getCollection("books"))
 <ZenLayout title="Reading" description="Books I've read and notes on them.">
   <SiteHeader active="books" />
 
-  <h1 class="page-title">Reading</h1>
-  <p class="page-desc">Books I've read, with notes and takeaways.</p>
+  <PageHeader title="Reading" description="Books I've read, with notes and takeaways." />
 
   <section>
     {books.map((book) => (
@@ -34,21 +34,6 @@ const books = (await getCollection("books"))
 </ZenLayout>
 
 <style>
-  .page-title {
-    font-size: 2.2rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin: 0;
-  }
-
-  .page-desc {
-    font-size: 1.5rem;
-    color: var(--c-meta);
-    line-height: 1.5;
-    max-width: 42ch;
-    margin: 0 0 2.4rem;
-  }
-
   .book-row {
     display: flex;
     align-items: flex-start;

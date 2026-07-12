@@ -1,6 +1,6 @@
 ---
-title: "Building a file metadata companion"
-description: "Why I built a companion-file system for storing context and connections between arbitrary files, and the Obsidian plugin fork that makes it work."
+title: "The original problem"
+description: "The reason I ended up wanting to build this."
 date: 2026-06-27
 ---
 
@@ -31,5 +31,3 @@ The solution seemed to be companion files for each file. This companion file can
 This isn't a new idea. Sidecar files exist in other contexts (XMP for photos, for instance). The gap is that no mainstream file manager treats this as a first-class concept for arbitrary file types.
 
 If companion files were standard, you could build on top of them: show related files in a sidebar, warn before deleting something that has dependents, surface expiry reminders. The metadata is already there. It just needs a place to live.
-
-I wrote about how I actually built this on top of Obsidian in a [follow-up post](/blog/media-companion-obsidian).

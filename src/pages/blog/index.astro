@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import ZenLayout from "@layouts/ZenLayout.astro";
 import SiteHeader from "@components/SiteHeader.astro";
+import PageHeader from "@components/PageHeader.astro";
 import { BLOG } from "@consts";
 
 const data = (await getCollection("blog"))
@@ -24,8 +25,7 @@ const monthDay = (d: Date) =>
 <ZenLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
   <SiteHeader active="blog" />
 
-  <h1 class="page-title">Posts</h1>
-  <p class="page-desc">Longer-form writing and notes on building with care.</p>
+  <PageHeader title="Posts" description="Longer-form writing and notes on building with care." />
 
   {years.map((year) => (
     <section class="year-group">
@@ -46,21 +46,6 @@ const monthDay = (d: Date) =>
 </ZenLayout>
 
 <style>
-  .page-title {
-    font-size: 2.2rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin: 0;
-  }
-
-  .page-desc {
-    font-size: 1.5rem;
-    color: var(--c-meta);
-    line-height: 1.5;
-    max-width: 42ch;
-    margin: 0 0 2.4rem;
-  }
-
   .year-group {
     margin-bottom: 2.8rem;
   }

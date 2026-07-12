@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import ZenLayout from "@layouts/ZenLayout.astro";
 import SiteHeader from "@components/SiteHeader.astro";
+import PageHeader from "@components/PageHeader.astro";
 
 
 export async function getStaticPaths() {
@@ -45,20 +46,15 @@ const navTitle = (p: CollectionEntry<"blog">) =>
   <SiteHeader active="blog" />
 
   <article>
-    <div class="post-meta">
-      <span>{dateLong}</span>
-      {post.data.tags?.map((tag) => (
-        <a href={`/tags/${tag}`} class="tag">#{tag}</a>
-      ))}
-    </div>
-
-    {!isMicro && post.data.title && (
-      <h1 class="post-title">{post.data.title}</h1>
-    )}
-
-    {isMicro && (
-      <p class="micro-lead">{post.data.description}</p>
-    )}
+    <PageHeader
+      date={dateLong}
+      title={!isMicro ? post.data.title : undefined}
+      tags={post.data.tags}
+    >
+      {isMicro && (
+        <p class="micro-lead">{post.data.description}</p>
+      )}
+    </PageHeader>
 
     <div class="zen-article">
       <Content />
@@ -83,41 +79,12 @@ const navTitle = (p: CollectionEntry<"blog">) =>
 </ZenLayout>
 
 <style>
-  .post-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.82rem;
-    color: var(--c-meta);
-    margin-bottom: 1.2rem;
-  }
-
-  .tag {
-    color: var(--c-meta);
-    text-decoration: none;
-    background: var(--c-featured-bg);
-    border-radius: 99px;
-    padding: 2px 10px;
-    font-size: 0.78rem;
-  }
-
-  .tag:hover { color: var(--c-fg); opacity: 1; }
-
-  .post-title {
-    font-size: 2.4rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin: 0 0 2rem;
-  }
-
   .micro-lead {
     font-size: 1.5rem;
     font-style: italic;
     color: var(--c-fg);
     line-height: 1.5;
-    margin: 0 0 2rem;
+    margin: 0;
   }
 
   .post-nav {
