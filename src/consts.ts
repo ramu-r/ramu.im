@@ -27,9 +27,9 @@ export const PROJECTS: Metadata = {
 
 export const AUTHOR: Author = {
   NAME: "Ramu Rajasekharan",
-  TAGLINE: "reader, writer & coder",
+  TAGLINE: "Frontend engineer & reader",
   BIO: [
-    "curious how technology and tools, the role they play in shaping ideas and thought",
+    "Curious how technology and tools shape  our ideas and thought",
     "This blog is a space to share process notes, reflections and ideas, both finished and in-progress, on building systems with intentions.",
     "Written by a human. Everything in this blog comes from a human. Sometimes LLMs are used to proofread."
   ],
