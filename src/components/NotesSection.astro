@@ -1,0 +1,104 @@
+---
+interface Props {
+  notes: any[];
+  hasMore: boolean;
+  fullDate: (d: Date) => string;
+}
+
+const { notes, hasMore, fullDate } = Astro.props;
+---
+
+<section class="notes">
+  <h2 class="zen-h2"><a href="/feed">feed</a></h2>
+  {notes.length === 0 && (
+    <p class="entry-desc">No notes yet.</p>
+  )}
+  {notes.map((note) => (
+    <div class="note">
+      <p class="note-text">{note.data.description}</p>
+      {note.data.link && (
+        <a href={note.data.link.url} class="note-link-card" target="_blank" rel="noopener">
+          <span class="link-title">{note.data.link.title}</span>
+          <span class="link-domain">{new URL(note.data.link.url).hostname.replace(/^www\./, "")}</span>
+        </a>
+      )}
+      <div class="note-footer">
+        <span class="note-meta">{fullDate(note.data.date)}</span>
+        {note.body && note.body.trim() && (
+          <a href={`/blog/${note.id}`} class="note-more">see more <span class="arrow">→</span></a>
+        )}
+      </div>
+    </div>
+  ))}
+  {hasMore && (
+    <div class="all-row">
+      <a href="/feed" class="all-link">see more <span class="arrow">→</span></a>
+    </div>
+  )}
+</section>
+
+<style>
+  .notes :global(.note:first-of-type) {
+    padding-top: 0;
+  }
+
+  .notes :global(.note-text) {
+    font-size: 0.96rem;
+  }
+
+  .note-footer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 6px;
+  }
+
+  .note-more {
+    font-size: 0.85rem;
+    color: var(--c-meta);
+    text-decoration: none;
+  }
+
+  .note-more:hover {
+    color: var(--c-fg);
+    opacity: 1;
+  }
+
+  .note-more .arrow {
+    color: var(--c-link);
+  }
+
+  .note-link-card {
+    display: block;
+    text-decoration: none;
+    margin-top: 6px;
+  }
+
+  .note-link-card:hover {
+    opacity: 0.65;
+  }
+
+  .note-link-card :global(.link-title) {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--c-fg);
+    text-decoration-line: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--c-link);
+  }
+
+  .note-link-card:hover :global(.link-title) {
+    color: var(--c-link);
+  }
+
+  .note-link-card :global(.link-domain) {
+    font-size: 0.85rem;
+    color: var(--c-meta);
+  }
+
+  .note-link-card :global(.link-domain)::before {
+    content: " — ";
+  }
+</style>

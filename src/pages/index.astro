@@ -1,7 +1,10 @@
 ---
 import ZenLayout from "@layouts/ZenLayout.astro";
-import SocialIcons from "@components/SocialIcons.astro";
-import { Image } from "astro:assets";
+import HomeHeader from "@components/HomeHeader.astro";
+import WritingSection from "@components/WritingSection.astro";
+import NotesSection from "@components/NotesSection.astro";
+import BooksSection from "@components/BooksSection.astro";
+import ProjectsSection from "@components/ProjectsSection.astro";
 import { SITE, HOME, AUTHOR } from "@consts";
 import { getCollection } from "astro:content";
 
@@ -50,425 +53,45 @@ const fullDate = (d: Date) =>
 ---
 
 <ZenLayout title={HOME.TITLE} description={SITE.DESCRIPTION}>
-  <!-- <span class="zen-logo home-logo" aria-hidden="true"></span> -->
-
-  <h1 class="home-name">I'm {AUTHOR.NAME.split(" ")[0]}</h1>
-  <p class="byline">{AUTHOR.TAGLINE}</p>
-  <p class="bio">{AUTHOR.BIO[0]}</p>
-
-  <SocialIcons />
+  <HomeHeader
+    firstName={AUTHOR.NAME.split(" ")[0]}
+    tagline={AUTHOR.TAGLINE}
+    bio={AUTHOR.BIO[0]}
+  />
 
   <div class="cols">
-    <section class="writing">
-      <h2 class="zen-h2"><a href="/blog">posts</a></h2>
-      {writing.map((post) => (
-        <>
-          <h3 class="entry-title">
-            <a href={`/blog/${post.id}`}>{post.data.title || post.data.description}</a>
-            {" "}<span class="entry-date">{monthYear(post.data.date)}</span>
-          </h3>
-          {post.data.title && post.data.description && (
-            <p class="entry-desc">{post.data.description}</p>
-          )}
-        </>
-      ))}
-      {hasMoreWriting && (
-        <div class="all-row">
-          <a href="/blog" class="all-link">see more <span class="arrow">→</span></a>
-        </div>
-      )}
-    </section>
-
-    <section class="notes">
-      <h2 class="zen-h2"><a href="/feed">feed</a></h2>
-      {notes.length === 0 && (
-        <p class="entry-desc">No notes yet.</p>
-      )}
-      {notes.map((note) => (
-        <div class="note">
-          <p class="note-text">{note.data.description}</p>
-          {note.data.link && (
-            <a href={note.data.link.url} class="note-link-card" target="_blank" rel="noopener">
-              <span class="link-title">{note.data.link.title}</span>
-              <span class="link-domain">{new URL(note.data.link.url).hostname.replace(/^www\./, "")}</span>
-            </a>
-          )}
-          <div class="note-footer">
-            <span class="note-meta">{fullDate(note.data.date)}</span>
-            {note.body && note.body.trim() && (
-              <a href={`/blog/${note.id}`} class="note-more">see more <span class="arrow">→</span></a>
-            )}
-          </div>
-        </div>
-      ))}
-      {hasMoreNotes && (
-        <div class="all-row">
-          <a href="/feed" class="all-link">see more <span class="arrow">→</span></a>
-        </div>
-      )}
-    </section>
+    <WritingSection posts={writing} hasMore={hasMoreWriting} monthYear={monthYear} />
+    <NotesSection notes={notes} hasMore={hasMoreNotes} fullDate={fullDate} />
   </div>
 
-  {books.length > 0 && (
-    <section class="books">
-      <h2 class="zen-h2"><a href="/books">reading</a></h2>
-      {books.map((book) => (
-        <div class="book-row">
-          <a href={`/books/${book.id}`} class="book-cover-link">
-            <Image src={book.data.cover} alt={`Cover of ${book.data.title}`} class="book-cover" width={200} />
-          </a>
-          <div class="book-body">
-            <h3 class="entry-title book-title">
-              <a href={`/books/${book.id}`}>{book.data.title}</a>
-            </h3>
-            <p class="book-author">{book.data.author}</p>
-            <p class="entry-desc book-excerpt">{book.data.excerpt}</p>
-          </div>
-        </div>
-      ))}
-      {hasMoreBooks && (
-        <div class="all-row">
-          <a href="/books" class="all-link">see more <span class="arrow">→</span></a>
-        </div>
-      )}
-    </section>
-  )}
-
-  {projects.length > 0 && (
-    <section class="projects">
-      <h2 class="zen-h2"><a href="/projects">projects</a></h2>
-      {projects.map((project) => (
-        <div class="project-block">
-          <div class="project-header">
-            <h3 class="entry-title project-title">
-              <a href={`/projects/${project.id}`}>{project.data.title}</a>
-            </h3>
-            {(projectNotesMap[project.id]?.length ?? 0) > 0 && (
-              <p class="project-notes-label">build log</p>
-            )}
-          </div>
-          <div class="project-row">
-            <div class="project-info">
-              <p class="entry-desc">{project.data.description}</p>
-              <div class="project-links">
-                {project.data.repoURL && (
-                  <a href={project.data.repoURL} target="_blank" rel="noopener">GitHub</a>
-                )}
-                {project.data.demoURL && (
-                  <a href={project.data.demoURL} target="_blank" rel="noopener">Demo</a>
-                )}
-              </div>
-            </div>
-            <div class="project-notes">
-              {projectNotesMap[project.id]?.slice(0, NUM_PROJECT_NOTES_ON_HOMEPAGE).map((note) => (
-                <a href={`/projects/${note.id}`} class="project-note">
-                  <span class="project-note-title"><span class="note-arrow">✦</span><span class="note-text">{note.data.title}</span></span>
-                </a>
-              ))}
-              {(projectNotesMap[project.id]?.length ?? 0) > NUM_PROJECT_NOTES_ON_HOMEPAGE && (
-                <div class="all-row">
-                  <a href={`/projects/${project.id}`} class="all-link">see more <span class="arrow">→</span></a>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      ))}
-      {hasMoreProjects && (
-        <div class="all-row">
-          <a href="/projects" class="all-link">see more <span class="arrow">→</span></a>
-        </div>
-      )}
-    </section>
-  )}
+  <BooksSection books={books} hasMore={hasMoreBooks} />
+  <ProjectsSection
+    projects={projects}
+    projectNotesMap={projectNotesMap}
+    hasMore={hasMoreProjects}
+    numProjectNotesOnHomepage={NUM_PROJECT_NOTES_ON_HOMEPAGE}
+  />
 </ZenLayout>
 
 <style>
-  .home-logo {
-    display: block;
-    margin-bottom: 2.6rem;
-  }
-
-  .home-name {
-    font-size: 9rem;
-    font-weight: 700;
-    letter-spacing: -0.08em;
-    margin: 0 0 0.5rem;
-    line-height: 1.05;
-    color: #3c3c3c;
-  }
-
-  .byline {
-    font-size: 1.5rem;
-    color: var(--c-desc);
-  }
-
-  .bio {
-    margin: 0 0 1.8rem;
-    font-size: 1.5rem;
-    color: var(--c-desc);
-    line-height: 1.6;
-    max-width: 520px;
-  }
-
-  .books {
-    margin-top: 5rem;
-  }
-
-  .book-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.6rem;
-  }
-
-  .book-row + .book-row {
-    margin-top: 2rem;
-  }
-
-  .book-cover-link {
-    flex-shrink: 0;
-    line-height: 0;
-  }
-
-  .book-cover {
-    width: 100px;
-    height: auto;
-    border-radius: 3px;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.16);
-  }
-
-  .book-body {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .book-title {
-    margin: 0;
-  }
-
-  .book-author {
-    margin: 0.2rem 0 0;
-    font-size: 0.85rem;
-    color: var(--c-meta);
-  }
-
-  .book-excerpt {
-    margin: 0.7rem 0 0;
-    max-width: 60ch;
-  }
-
-  .projects {
-    margin-top: 5rem;
-  }
-
-  .project-block + .project-block {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--c-divider);
-  }
-
-  .project-row {
-    display: flex;
-    gap: 2em;
-  }
-
-  .project-info { flex: 3 1 0; min-width: 0; }
-  .project-notes { flex: 2 1 0; }
-
-  .project-title {
-    margin-top: 0;
-    margin-bottom: 0.4rem;
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-
-  .project-links {
-    display: flex;
-    gap: 1.1rem;
-    margin-top: 0.7rem;
-  }
-
-  .project-links a {
-    font-size: 0.85rem;
-    color: var(--c-meta);
-    text-decoration: none;
-  }
-
-  .project-links a:hover { color: var(--c-fg); }
-
-  .project-header {
-    display: flex;
-    gap: 2em;
-    align-items: baseline;
-    margin-bottom: 0.2rem;
-  }
-
-  .project-header .project-title {
-    flex: 3 1 0;
-    min-width: 0;
-  }
-
-  .project-notes-label {
-    flex: 2 1 0;
-    margin: 0;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--c-meta);
-  }
-
-  .project-note {
-    display: block;
-    text-decoration: none;
-  }
-
-  .project-note + .project-note {
-    margin-top: 0.6rem;
-  }
-
-  .project-note .project-note-title {
-    display: flex;
-    align-items: baseline;
-    gap: 0.4em;
-    margin: 0;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--c-fg);
-  }
-
-  .note-arrow {
-    flex-shrink: 0;
-    color: var(--c-link);
-    text-decoration: none;
-  }
-
-  .project-note .project-note-title .note-text {
-    text-decoration-line: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-    text-decoration-color: var(--c-link);
-  }
-
-  .project-note:hover .project-note-title {
-    color: var(--c-link);
-  }
-
-  .project-note .project-note-desc {
-    display: block;
-    margin-top: 0.25rem;
-  }
-
   .cols {
     display: flex;
     gap: 4em;
     margin-bottom: 1rem;
   }
 
-  .writing { flex: 1 1 65%; }
-  .notes { flex: 1 1 45%; }
+  :global(.writing) {
+    flex: 1 1 65%;
+  }
+
+  :global(.notes) {
+    flex: 1 1 45%;
+  }
 
   @media (max-width: 640px) {
     .cols {
       flex-direction: column;
       gap: 2.6rem;
     }
-    .project-block .project-row {
-      flex-direction: column;
-      gap: 1.6rem;
-    }
-    .home-name { font-size: 2.4rem; }
-  }
-
-  .writing :global(.entry-title:first-of-type) {
-    margin-top: 0;
-  }
-
-  .notes :global(.note:first-of-type) {
-    padding-top: 0;
-  }
-
-  .notes :global(.note-text) {
-    font-size: 0.96rem;
-  }
-
-  .writing :global(.entry-desc),
-  .projects :global(.entry-desc) {
-    font-size: 0.96rem;
-  }
-
-  .zen-h2 :global(a) {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .zen-h2 :global(a:hover) {
-    color: var(--c-fg);
-    opacity: 1;
-  }
-
-  .all-row {
-    margin-top: 1.6rem;
-    text-align: right;
-  }
-
-  .all-link {
-    font-size: 0.85rem;
-    color: var(--c-meta);
-    text-decoration: none;
-  }
-
-  .all-link:hover { color: var(--c-fg); opacity: 1; }
-
-  .all-link .arrow { color: var(--c-link); }
-
-  .note-footer {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 6px;
-  }
-
-  .note-more {
-    font-size: 0.85rem;
-    color: var(--c-meta);
-    text-decoration: none;
-  }
-
-  .note-more:hover { color: var(--c-fg); opacity: 1; }
-
-  .note-more .arrow { color: var(--c-link); }
-
-  .note-link-card {
-    display: block;
-    text-decoration: none;
-    margin-top: 6px;
-  }
-
-  .note-link-card:hover { opacity: 0.65; }
-
-  .note-link-card :global(.link-title) {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--c-fg);
-    text-decoration-line: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-    text-decoration-color: var(--c-link);
-  }
-
-  .note-link-card:hover :global(.link-title) {
-    color: var(--c-link);
-  }
-
-  .note-link-card :global(.link-domain) {
-    font-size: 0.85rem;
-    color: var(--c-meta);
-  }
-
-  .note-link-card :global(.link-domain)::before {
-    content: " — ";
   }
 </style>

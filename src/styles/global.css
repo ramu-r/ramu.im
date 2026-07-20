@@ -131,6 +131,17 @@ a:hover {
   padding-bottom: 0.65rem;
 }
 
+.zen-h2 a:link,
+.zen-h2 a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+.zen-h2 a:hover {
+  color: var(--c-fg);
+  opacity: 1;
+}
+
 /* ───────────────────────── Entry list (writing) ───────────────────────── */
 .entry-title {
   font-size: 1.08rem;
@@ -208,6 +219,27 @@ a:hover {
   font-size: 0.8rem;
   color: var(--c-meta);
   margin-top: 5px;
+}
+
+/* ───────────────────────── More links (see all) ───────────────────────── */
+.all-row {
+  margin-top: 1.6rem;
+  text-align: right;
+}
+
+.all-link {
+  font-size: 0.85rem;
+  color: var(--c-meta);
+  text-decoration: none;
+}
+
+.all-link:hover {
+  color: var(--c-fg);
+  opacity: 1;
+}
+
+.all-link .arrow {
+  color: var(--c-link);
 }
 
 /* ───────────────────────── Footer ───────────────────────── */

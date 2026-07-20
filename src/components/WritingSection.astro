@@ -1,0 +1,39 @@
+---
+interface Props {
+  posts: any[];
+  hasMore: boolean;
+  monthYear: (d: Date) => string;
+}
+
+const { posts, hasMore, monthYear } = Astro.props;
+---
+
+<section class="writing">
+  <h2 class="zen-h2"><a href="/blog">posts</a></h2>
+  {posts.map((post) => (
+    <>
+      <h3 class="entry-title">
+        <a href={`/blog/${post.id}`}>{post.data.title || post.data.description}</a>
+        {" "}<span class="entry-date">{monthYear(post.data.date)}</span>
+      </h3>
+      {post.data.title && post.data.description && (
+        <p class="entry-desc">{post.data.description}</p>
+      )}
+    </>
+  ))}
+  {hasMore && (
+    <div class="all-row">
+      <a href="/blog" class="all-link">see more <span class="arrow">→</span></a>
+    </div>
+  )}
+</section>
+
+<style>
+  .writing :global(.entry-title:first-of-type) {
+    margin-top: 0;
+  }
+
+  .writing :global(.entry-desc) {
+    font-size: 0.96rem;
+  }
+</style>
